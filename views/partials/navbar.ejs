@@ -1,0 +1,19 @@
+<nav style="background-color: #f8f9fa; display: flex; justify-content: space-between; align-items: center; padding: 10px 20px;">
+    <div style="flex: 1;">
+      <a href="/" style="text-decoration: none; color: #234335;">Home</a>
+    </div>
+    <h2 style="flex: 2; text-align: center; color: #234335; margin: 0;">GradQuest App</h2>
+    <div style="flex: 1; text-align: right;">
+      <% if (user) { %>
+        <span style="color: rgb(34, 82, 34);">Hi <%= user.name %> </span>
+        <form method="POST" action="/sessions/logoff" style="display: inline;">
+          <input type="hidden" name="_csrf" value="<%= csrfToken %>" />
+          <button type="submit" style="background-color:#468669; color: white; margin-left: 10px; border: none;">
+            Log out
+          </button>
+        </form>
+      <% } else { %>
+        <a href="/sessions/logon" style="text-decoration: none; color: #234335;">Login</a>
+      <% } %>
+    </div>
+  </nav>

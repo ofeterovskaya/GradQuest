@@ -1,26 +1,13 @@
-<!-- <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; height: auto;"> -->
-<h1 style="text-align: center;">The Jobs EJS Application</h1>
-<% if (user) { %>
-  <p style="color: rgb(34, 82, 34); text-align: center; ">User <%= user.name %> is logged on.</p>
-   <form method="POST" action="/sessions/logoff" style="position: absolute; top: 0; right: 0;">
-    <input type="hidden" name="_csrf" value="<%= csrfToken %>" />
-   <button 
-    type="submit"
-    style="background-color: darkgreen; color: white;">
-      Log out
-  </button>
-   </form>
+<% if (errors && errors.length) { %>
+  <% errors.forEach((err) => { %>
+    <p class="alert alert-danger" style="width: 30%; margin: 0 auto;">Error: <%= err %></p>
+  <% }) %>
 <% } %>
-<% if (errors && errors.length) {
-    errors.forEach((err) => { %>
-      <p class="alert alert-danger" style="width: 30%; margin: 0 auto;">Error: <%= err %></p>
-    <% })
-  } %>
-<% if (info && info.length) {
-    info.forEach((msg) => { %>
-      <p class="alert alert-success">Info: <%= msg %></p>
-    <% })
-  } %>
+<% if (info && info.length) { %>
+  <% info.forEach((msg) => { %>
+    <p class="alert alert-success">Info: <%= msg %></p>
+  <% }) %>
+<% } %>
 <% if ((errors && errors.length) || (info && info.length)) { %>
-    <hr />
+  <hr />
 <% } %>
