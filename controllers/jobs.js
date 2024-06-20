@@ -1,6 +1,5 @@
 const mongoose = require('mongoose');
 const Jobs = require('../models/Job');
-//const validateId = require('../middleware/validateId');
 const handleErrors = require("../utils/parseValidationErrs");
 const csrfProtection = require("../middleware/csrfProtection");
 
