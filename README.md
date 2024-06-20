@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # GradQuest
 Purpose:
 
@@ -12,3 +13,6 @@ Empower: Equip students with the knowledge and skills they need to successfully 
 Innovate: Continually enhance our platform with the latest technology and best practices in educational consulting to ensure an exceptional user experience.
 Inspire: Foster a community of motivated learners who are inspired to reach their full potential and pursue their academic dreams.
 Through these efforts, GradQuest aims to make the journey to higher education a rewarding and attainable endeavor for all students.
+=======
+# GradQuest
+>>>>>>> origin/main
