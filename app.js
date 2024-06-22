@@ -14,6 +14,8 @@ const cookieParser = require("cookie-parser");
 const auth = require('./middleware/auth');
 const schools = require('./routes/schools');
 const School = require('./models/School');
+// const newSchool = require('./controllers/schoolController');
+// const schoolList = require('./controllers/schoolController');
 //const counselorRoutes = require("./routes/counselorRoutes");
 const sessionRoutes = require('./routes/sessionRoutes');
 const methodOverride = require('method-override');
@@ -87,6 +89,8 @@ app.use((req, res, next) => {
   app.use(storeLocals);  
   app.use("/schools", schools);  
   app.use('/sessions', sessionRoutes);
+  // app.use('/new', newSchool);
+  // app.use('/schoolList', schoolList);
   // app.use('/student', schools);
   //app.use("/counselor", counselorRoutes);
   
