@@ -1,4 +1,5 @@
 const User = require("../models/User");
+const School = require("../models/School"); 
 const parseVErr = require("../utils/parseValidationErrs");
 
 const registerShow = (req, res) => {
@@ -12,6 +13,11 @@ const registerDo = async (req, res) => {
       throw new Error("The passwords do not match.");
     }
     await User.create(req.body);
+    if (req.body.userType === 'student') {
+      // Create a student profile linked to the user
+      await StudentProfile.create({ userId: user._id, ...req.body.studentDetails });
+    }
+    
     res.redirect("/");
   } catch (e) {
     if (e.constructor.name === "ValidationError") {
