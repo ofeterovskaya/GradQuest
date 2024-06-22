@@ -12,8 +12,9 @@ const passportInit = require("./passport/passportInit");
 const bodyParser = require('body-parser');
 const cookieParser = require("cookie-parser");
 const auth = require('./middleware/auth');
-const jobs = require('./routes/jobs');
-const Job = require('./models/Job');
+const schools = require('./routes/schools');
+const School = require('./models/School');
+//const counselorRoutes = require("./routes/counselorRoutes");
 const sessionRoutes = require('./routes/sessionRoutes');
 const methodOverride = require('method-override');
 const secretWordRouter = require("./routes/secretWord");
@@ -76,14 +77,6 @@ passportInit();
 app.use(passport.initialize());
 app.use(passport.session());
 
-
-
-// // Middleware to add the CSRF token to the response locals
-// app.use((req, res, next) => {
-//     res.locals.csrfToken = req.csrfToken();
-//     next();
-// });
-
 // Middleware to add flash messages to the response locals
 app.use((req, res, next) => {
     res.locals.info = req.flash("info");
@@ -92,8 +85,10 @@ app.use((req, res, next) => {
   });
  
   app.use(storeLocals);  
-  app.use("/jobs", jobs);  
+  app.use("/schools", schools);  
   app.use('/sessions', sessionRoutes);
+  // app.use('/student', schools);
+  //app.use("/counselor", counselorRoutes);
   
   app.get("/", csrfProtection, (req, res) => {
       res.render("index", { csrfToken: req.csrfToken() });
@@ -118,14 +113,6 @@ app.use((err, req, res, next) => {
     res.status(500).send(err.message); 
     console.log(err);
 });
-
-// app.get('/multiply', (req, res) => {
-//     const first = Number(req.query.first);
-//     const second = Number(req.query.second);
-//     const result = first * second;
-  
-//     res.send(`The result is ${result}`);
-//   });
 
 const port = process.env.PORT || 3000;
 

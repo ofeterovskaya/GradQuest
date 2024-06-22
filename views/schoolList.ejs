@@ -1,0 +1,55 @@
+<%- include("partials/head.ejs") %>
+<%- include("partials/header.ejs") %>
+<%- include("partials/navbar.ejs") %>
+<div style="text-align: center;">
+  <h2>Schools List</h2>
+  <a href="/schools/new" class="btn btn-primary mb-3" style="background-color: rgb(34, 82, 34); color: white; font-size: larger;">Add New School</a>
+</div>
+<table id="schools-table" class="table" style="margin-left: auto; margin-right: auto;">
+  <thead class="thead-dark">
+    <tr>
+      <th>School Name</th>
+      <th>SAT/ACT Score</th>
+      <th>GPA Score</th>
+      <th>Activities</th>
+      <th>Volunteering</th>
+      <th>Awards</th>
+      <th>Clubs</th>
+      <th>Sport</th>      
+      <th>Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% if (schools && schools.length) { %>
+      <% schools.forEach((school) => { %>
+        <tr>
+          <td><%= school.schoolName %></td>
+          <td><%= school.satActScore %></td>
+          <td><%= school.gpaScore %></td>
+          <td><%= school.activities %></td>
+          <td><%= school.volunteering %></td>
+          <td><%= school.awards %></td>
+          <td><%= school.clubs %></td>
+          
+          <td class="text-end">
+            <a href="/schools/edit/<%= school.id %>" class="btn" style="background-color: rgb(34, 82, 34); color: white;">
+              Edit
+            </a>
+            <form action="/schools/delete/<%= school.id %>" method="POST" style="display:inline;">
+              <input type="hidden" name="_method" value="DELETE">
+              <button type="submit" class="btn" style="background-color: red; color: white;">
+                Delete
+              </button>
+              <input type="hidden" name="_csrf" value="<%= csrfToken %>" />
+            </form>
+          </td>
+        </tr>
+      <% }) %>
+    <% } else { %>
+      <tr>
+        <td colspan="5">No schools found</td>
+      </tr>
+    <% } %>
+  </tbody>
+</table>
+<%- include("partials/footer.ejs") %>
