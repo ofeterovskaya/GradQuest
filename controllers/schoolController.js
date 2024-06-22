@@ -2,6 +2,7 @@ const mongoose = require('mongoose');
 const School = require('../models/School');
 const handleErrors = require("../utils/parseValidationErrs");
 const csrfProtection = require("../middleware/csrfProtection");
+const newSchool = require('../controllers/schoolController');
 
 // GET a form for adding a new school
 const getNewSchool = (req, res) => {
@@ -22,16 +23,56 @@ const getSchools = async (req, res, next) => {
     }
 };
 
-// POST a new School
+// // POST a new School
+// const addSchools = async (req, res, next) => {
+//     try {
+//         await School.create({ ...req.body, createdBy: req.user._id });
+//         res.redirect('/schools'); 
+//     } catch (error) {
+//         handleErrors(error, req, res);
+//     }
+// };
+
+// Simplified addSchools for debugging
 const addSchools = async (req, res, next) => {
+    console.log(req.body); // Log the request body to ensure it's as expected
+    const { schoolName, gpaScore, satActScore, awards, clubs, sport, createdBy } = req.body;
+
+    // Validate GPA
+    const gpa = parseFloat(gpaScore);
+    if (isNaN(gpa) || gpa > 4) {
+        return res.status(400).send("Invalid GPA. Maximum allowed value is 4.0.");
+    }
+
+    // Assuming a simple conversion for SAT to ACT (for demonstration purposes)
+    const satToAct = (sat) => Math.min(36, Math.round(sat / 80)); // Example conversion
+    let actScore = parseInt(satActScore);
+    if (isNaN(actScore)) {
+        return res.status(400).send("Invalid SAT/ACT score.");
+    }
+    // Convert SAT to ACT if necessary (assuming SAT scores are higher than 36)
+    if (actScore > 36) {
+        actScore = satToAct(actScore);
+    }
+
     try {
-        await School.create({ ...req.body, createdBy: req.user._id });
+        const schoolData = {
+            ...req.body,
+            gpa: gpaScore,
+            testScores: {
+                SAT: satActScore,
+                ACT: actScore.toString() // Ensure ACT score is within valid range
+            },
+            createdBy: req.user._id
+        };
+        await School.create(schoolData);
+        console.log("School successfully added");
         res.redirect('/schools'); 
     } catch (error) {
-        handleErrors(error, req, res);
+        console.error(error); // Ensure errors are logged
+        res.status(500).send("An error occurred");
     }
 };
-
 // Edit a school
 const editSchools = async (req, res) => {
     const id = req.params.id; // Get school ID from URL parameters
