@@ -14,6 +14,8 @@ const cookieParser = require("cookie-parser");
 const auth = require('./middleware/auth');
 const schools = require('./routes/schools');
 const School = require('./models/School');
+// const newSchool = require('./controllers/schoolController');
+// const schoolList = require('./controllers/schoolController');
 //const counselorRoutes = require("./routes/counselorRoutes");
 const sessionRoutes = require('./routes/sessionRoutes');
 const methodOverride = require('method-override');
@@ -87,6 +89,8 @@ app.use((req, res, next) => {
   app.use(storeLocals);  
   app.use("/schools", schools);  
   app.use('/sessions', sessionRoutes);
+  // app.use('/new', newSchool);
+  // app.use('/schoolList', schoolList);
   // app.use('/student', schools);
   //app.use("/counselor", counselorRoutes);
   
@@ -97,6 +101,16 @@ app.use((req, res, next) => {
   app.get('/edit', csrfProtection, (req, res) => {
     // Redirect to a job listing page, or handle as needed
     res.render('edit', { csrfToken: req.csrfToken() });
+});
+app.get('/schools', csrfProtection, async (req, res) => {
+  try {
+      const schools = await School.find();
+      console.log(schools); // Log the data to check the structure
+      res.render('schools/index', { schools, csrfToken: req.csrfToken() });
+  } catch (error) {
+      console.error('Error fetching schools:', error);
+      res.status(500).send('Internal Server Error');
+  }
 });
 
 //const auth = require("./middleware/auth");
