@@ -40,8 +40,8 @@ const addSchools = async (req, res, next) => {
 
     // Validate GPA
     const gpa = parseFloat(gpaScore);
-    if (isNaN(gpa) || gpa > 4) {
-        return res.status(400).send("Invalid GPA. Maximum allowed value is 4.0.");
+    if (isNaN(gpa) || gpa > 5) {
+        return res.status(400).send("Invalid GPA. Maximum allowed value is 5.0.");
     }
 
     // Assuming a simple conversion for SAT to ACT (for demonstration purposes)
