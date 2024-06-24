@@ -104,7 +104,20 @@ app.use((req, res, next) => {
     // Redirect to a job listing page, or handle as needed
     res.render('edit', { csrfToken: req.csrfToken() });
 });
+// Route for fetching schools with sorting
+app.get('/schools', async (req, res) => {
+  let sortField = req.query.sort || 'schoolName'; // Default sort field
+  let sortOrder = req.query.order === '-1' ? -1 : 1; // Toggle between ascending (1) and descending (-1)
 
+  try {
+    const schools = await School.find({}).sort({ [sortField]: sortOrder });
+    console.log(schools); // Log the schools data to the terminal
+    res.render('schoolList', { schools, sortField, sortOrder });
+  } catch (error) {
+    console.error("Error fetching schools:", error);
+    res.status(500).send("Error fetching schools");
+  }
+});
 //const auth = require("./middleware/auth");
 app.use("/secretWord", auth, secretWordRouter);
 

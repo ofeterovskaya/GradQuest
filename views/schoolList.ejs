@@ -6,7 +6,10 @@
     <div class="col-12 text-center">
       <h2>School List</h2>
       <a href="/schools/new" class="btn btn-primary mb-3" style="background-color: #225222; color: white; font-size: larger;">Add New School</a>
-      <a href="https://bigfuture.collegeboard.org/scholarships" class="btn btn-secondary mb-3" style="font-size: larger;">View Scholarships</a>
+      <a href="https://bigfuture.collegeboard.org/scholarships" class="btn mb-3" style="font-size: larger; background-color: #f2f2f2">View Scholarships</a>
+      <div style="text-align: right">
+        <a href="/schools?sort=schoolName" id="sortByName" style ="color: #225222">Sort by Name <i class="fas fa-arrow-up"></i><i class="fas fa-arrow-down"></i></a>
+      </div>
     </div>
   </div>
   <div class="row">
@@ -81,17 +84,18 @@
         <p>No schools found.</p>
       </div>
     <% } %>
+    <!-- Pagination -->
     <div class="container mt-4 pb-5" style="padding-bottom: 70px;"> 
-    <nav aria-label="Page navigation" style="margin-bottom: 50px;">
-      <ul class="pagination justify-content-center">
-        <% for(let i = 1; i <= pages; i++) { %>
-          <li class="page-item <%= i === current ? 'active' : '' %> <%= i > 1 ? 'ms-2' : '' %>">
-            <a class="page-link bg-secondary text-white" href="/schools?page=<%= i %>"><%= i %></a>
-          </li>
-        <% } %>
-      </ul>
-    </nav>
-  </div>
+      <nav aria-label="Page navigation" style="margin-bottom: 50px; ">
+        <ul class="pagination justify-content-center">
+          <% for(let i = 1; i <= pages; i++) { %>
+            <li class="page-item <%= i === current ? 'active' : '' %> <%= i > 1 ? 'ms-2' : '' %>">
+              <a class="page-link text-black" style ="background-color: #f2f2f2" href="/schools?page=<%= i %>"><%= i %></a>
+            </li>
+          <% } %>
+        </ul>
+      </nav>
+    </div>
   </div>
 </div>
 <%- include("partials/footer.ejs") %>
