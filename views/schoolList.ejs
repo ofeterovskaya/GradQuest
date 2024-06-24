@@ -4,7 +4,7 @@
 <div class="container mt-4">
   <div class="row">
     <div class="col-12 text-center">
-      <h2>Schools List</h2>
+      <h2>School List</h2>
       <a href="/schools/new" class="btn btn-primary mb-3" style="background-color: #225222; color: white; font-size: larger;">Add New School</a>
       <a href="https://bigfuture.collegeboard.org/scholarships" class="btn btn-secondary mb-3" style="font-size: larger;">View Scholarships</a>
     </div>
@@ -14,51 +14,72 @@
       <% schools.forEach((school, index) => { %>
         <div class="col-md-4 mb-3">
           <div class="card h-100">
+            <!-- First Box: School Details -->
             <div class="card-body">
               <div class="text-center">
                 <strong>School Details</strong>
               </div>
-              <div style="display: flex; justify-content: space-between;">
-                <strong class="fs-8">School Name:</strong>
-                <span><%= school.schoolName %></span>
+              <div>
+                <!-- School Name -->
+                <div style="display: flex; justify-content: space-between;">
+                  <strong>School Name:</strong>
+                  <span><%= school.schoolName %></span>
+                </div>
+                <!-- SAT/ACT Score -->
+                <div style="display: flex; justify-content: space-between;">
+                  <strong>SAT/ACT Score:</strong>
+                  <span>
+                    <%= school.testScores.ACT ? school.testScores.ACT : '' %> 
+                    <%= school.testScores.SAT ? '' + school.testScores.SAT : '' %>
+                  </span>
+                </div>
+                <!-- GPA Score -->
+                <div style="display: flex; justify-content: space-between;">
+                  <strong>GPA Score:</strong>
+                  <span><%= school.gpa %></span>
+                </div>
+                <!-- Volunteering -->
+                <div style="display: flex; justify-content: space-between;">
+                  <strong class="fs-8">Volunteering:</strong>
+                  <span><%= school.volunteering%></span>
+                </div>
+                <!-- Awards -->
+                <div style="display: flex; justify-content: space-between;">
+                  <strong>Awards:</strong>
+                  <span><%= school.awards %></span>
+                </div>
+                <!-- Clubs -->
+                <div style="display: flex; justify-content: space-between;">
+                  <strong>Clubs:</strong>
+                  <span><%= school.clubs %></span>
+                </div>
+                <!-- Sport -->
+                <div style="display: flex; justify-content: space-between;">
+                  <strong>Sport:</strong>
+                  <span><%= school.sport %></span>
+                </div>
               </div>
-              <div style="display: flex; justify-content: space-between;">
-                <strong class="fs-8">SAT/ACT Score:</strong>
-                <span><%= school.testScores.ACT %></span>
-              </div>
-              <div style="display: flex; justify-content: space-between;">
-                <strong class="fs-8"> GPA Score:</strong>
-                <span><%= school.gpa%></span>
-              </div>
-              <div style="display: flex; justify-content: space-between;">
-                <strong class="fs-8">Volunteering:</strong>
-                <span><%= school.volunteering%></span>
-              </div>
-              <div style="display: flex; justify-content: space-between;">
-                <strong class="fs-8">Awards:</strong>
-                <span><%= school.awards %></span>
-              </div>
-              <div style="display: flex; justify-content: space-between;">
-                <strong class="fs-8">Clubs:</strong>
-                <span><%= school.clubs %></span>
-              </div>
-              <div style="display: flex; justify-content: space-between;">
-                <strong class="fs-8">Sport:</strong>
-                <span><%= school.sport %></span>
-              </div>
-              <!-- New div for Edit and Delete buttons with centered alignment and background -->
-              <div class="text-center" style="padding: 10px;">
-                <a href="/schools/edit/<%= school.id %>" class="btn btn-success" style="background-color: #d1e7dd; color: #0c4128;">Edit</a>
-                <form action="/schools/delete/<%= school.id %>" method="POST" style="display: inline;">
-                  <input type="hidden" name="_method" value="DELETE">
-                  <input type="hidden" name="_csrf" value="<%= csrfToken %>"> <!-- Include CSRF token -->
-                  <button type="submit" class="btn btn-danger">Delete</button>
-                </form>
-              </div>
+            </div>
+            <!-- Second Box: Action Buttons -->
+            <div class="card-footer" style="text-align: center;">
+              <a href="/schools/edit/<%= school.id %>"
+                 class="btn btn-success" 
+                 style="margin-right: 20%; background-color: #d1e7dd; color: #0c4128;">
+                 Edit
+              </a>
+              <form action="/schools/delete/<%= school.id %>" method="POST" style="display: inline;">
+                <input type="hidden" name="_method" value="DELETE">
+                <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+                <button type="submit" class="btn btn-danger">Delete</button>
+              </form>
             </div>
           </div>
         </div>
       <% }); %>
+    <% } else { %>
+      <div class="col-12 text-center">
+        <p>No schools found.</p>
+      </div>
     <% } %>
   </div>
 </div>

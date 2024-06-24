@@ -36,7 +36,7 @@ const getSchools = async (req, res, next) => {
 // Simplified addSchools for debugging
 const addSchools = async (req, res, next) => {
     console.log(req.body); // Log the request body to ensure it's as expected
-    const { schoolName, gpaScore, satActScore, awards, clubs, sport, createdBy } = req.body;
+    const { schoolName, gpaScore, actScore, satActScore, scoreType,volunteering, awards, clubs, sport, createdBy } = req.body;
 
     // Validate GPA
     const gpa = parseFloat(gpaScore);
@@ -44,34 +44,41 @@ const addSchools = async (req, res, next) => {
         return res.status(400).send("Invalid GPA. Maximum allowed value is 5.0.");
     }
 
-    // Assuming a simple conversion for SAT to ACT (for demonstration purposes)
-    const satToAct = (sat) => Math.min(36, Math.round(sat / 80)); // Example conversion
-    let actScore = parseInt(satActScore);
-    if (isNaN(actScore)) {
-        return res.status(400).send("Invalid SAT/ACT score.");
-    }
-    // Convert SAT to ACT if necessary (assuming SAT scores are higher than 36)
-    if (actScore > 36) {
-        actScore = satToAct(actScore);
-    }
+// Validate SAT/ACT score
+const score = parseInt(satActScore);
+if (isNaN(score)) {
+    return res.status(400).send("Invalid SAT/ACT score.");
+}
 
-    try {
-        const schoolData = {
-            ...req.body,
-            gpa: gpaScore,
-            testScores: {
-                SAT: satActScore,
-                ACT: actScore.toString() // Ensure ACT score is within valid range
-            },
-            createdBy: req.user._id
-        };
-        await School.create(schoolData);
-        console.log("School successfully added");
-        res.redirect('/schools'); 
-    } catch (error) {
-        console.error(error); // Ensure errors are logged
-        res.status(500).send("An error occurred");
-    }
+// Determine if the score is SAT or ACT based on its value
+let testScores;
+if (scoreType === "SAT") {
+    testScores = { SAT: score };
+} else if (scoreType === "ACT") {
+    testScores = { ACT: score };
+} else {
+    return res.status(400).send("Score type must be either SAT or ACT.");
+}
+
+try {
+    const schoolData = {
+        schoolName,
+        gpa: gpaScore,
+        act:actScore,
+        testScores,
+        volunteering,
+        awards,
+        clubs,
+        sport,
+        createdBy: req.user._id
+    };
+    await School.create(schoolData);
+    console.log("School successfully added");
+    res.redirect('/schools');
+} catch (error) {
+    console.error("Error adding school:", error);
+    res.status(500).send("An error occurred while adding the school.");
+}
 };
 // Edit a school
 const editSchools = async (req, res) => {
