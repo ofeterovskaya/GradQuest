@@ -26,12 +26,12 @@
                   <span><%= school.schoolName %></span>
                 </div>
                 <!-- SAT/ACT Score -->
-                <div style="display: flex; justify-content: space-between;">
+                <div class="d-flex justify-content-between mb-2">
                   <strong>SAT/ACT Score:</strong>
-                  <span>
-                    <%= school.testScores.ACT ? school.testScores.ACT : '' %> 
-                    <%= school.testScores.SAT ? '' + school.testScores.SAT : '' %>
-                  </span>
+                  <div>
+                    <span><%= school.testScores.ACT ? `${school.testScores.ACT}` : '' %></span>
+                    <span><%= school.testScores.SAT ? `${school.testScores.SAT}` : '' %></span>
+                  </div>
                 </div>
                 <!-- GPA Score -->
                 <div style="display: flex; justify-content: space-between;">
