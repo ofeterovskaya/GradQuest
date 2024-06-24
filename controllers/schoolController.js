@@ -23,17 +23,7 @@ const getSchools = async (req, res, next) => {
     }
 };
 
-// // POST a new School
-// const addSchools = async (req, res, next) => {
-//     try {
-//         await School.create({ ...req.body, createdBy: req.user._id });
-//         res.redirect('/schools'); 
-//     } catch (error) {
-//         handleErrors(error, req, res);
-//     }
-// };
-
-// Simplified addSchools for debugging
+// POST a new school
 const addSchools = async (req, res, next) => {
     console.log(req.body); // Log the request body to ensure it's as expected
     const { schoolName, gpaScore, actScore, satActScore, scoreType,volunteering, awards, clubs, sport, createdBy } = req.body;
