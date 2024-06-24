@@ -47,8 +47,8 @@
                 <span><%= school.sport %></span>
               </div>
               <!-- New div for Edit and Delete buttons with centered alignment and background -->
-              <div class="text-center" style="background-color: #F7F7F7; padding: 10px;">
-                <a href="/schools/edit/<%= school.id %>" class="btn btn-success">Edit</a>
+              <div class="text-center" style="padding: 10px;">
+                <a href="/schools/edit/<%= school.id %>" class="btn btn-success" style="background-color: #d1e7dd; color: #0c4128;">Edit</a>
                 <form action="/schools/delete/<%= school.id %>" method="POST" style="display: inline;">
                   <input type="hidden" name="_method" value="DELETE">
                   <input type="hidden" name="_csrf" value="<%= csrfToken %>"> <!-- Include CSRF token -->
