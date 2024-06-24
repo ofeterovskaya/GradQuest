@@ -11,23 +11,38 @@ const getNewSchool = (req, res) => {
 
 // GET all Schools for the current user
 const getSchools = async (req, res) => {
-    let { page, limit } = req.query;
-    page = parseInt(page, 6) || 1;
-    limit = parseInt(limit, 6) || 6; 
+    let { page, limit, order, sort } = req.query;
+    page = parseInt(page) || 1;
+    limit = parseInt(limit) || 6;
+    const query = { createdBy: req.user._id };
+
+    // Toggle sortOrder based on the current request
+    const sortOrder = order === 'desc' ? -1 : 1;
 
     try {
-        const query = { createdBy: req.user._id };
         const schools = await School.find(query)
+                                    .sort({ [sort]: sortOrder })
                                     .skip((page - 1) * limit)
                                     .limit(limit);
         const total = await School.countDocuments(query);
         const pages = Math.ceil(total / limit);
 
-            res.render('schoolList', { schools, total, pages, current: page, csrfToken: req.csrfToken() });
+        // Determine the next sortOrder for the frontend link
+        const nextOrder = order === 'asc' ? 'desc' : 'asc';
+
+        res.render('schoolList', {
+            schools,
+            total,
+            pages,
+            current: page,
+            sortField: sort,
+            sortOrder: nextOrder, // Pass the nextOrder for the frontend to use
+            csrfToken: req.csrfToken()
+        });
     } catch (error) {
-        handleErrors(error, req, res); 
+        handleErrors(error, req, res);
         console.error('Error fetching schools:', error.message);
-        console.error(error.stack); // Log the stack trace
+        console.error(error.stack);
         res.status(500).send('An error occurred while fetching schools');
     }
 };

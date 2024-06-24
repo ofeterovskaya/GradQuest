@@ -8,7 +8,8 @@
       <a href="/schools/new" class="btn btn-primary mb-3" style="background-color: #225222; color: white; font-size: larger;">Add New School</a>
       <a href="https://bigfuture.collegeboard.org/scholarships" class="btn mb-3" style="font-size: larger; background-color: #f2f2f2">View Scholarships</a>
       <div style="text-align: right">
-        <a href="/schools?sort=schoolName" id="sortByName" style ="color: #225222">Sort by Name <i class="fas fa-arrow-up"></i><i class="fas fa-arrow-down"></i></a>
+        <!-- Assume the initial sort order is ascending ('asc'). The server will toggle it based on the current state. -->
+        <a href="/schools?sort=schoolName&order=asc" id="sortByName" style="color: #225222">Sort by Name <i class="fas fa-arrow-up"></i><i class="fas fa-arrow-down"></i></a>
       </div>
     </div>
   </div>

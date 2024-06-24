@@ -14,15 +14,13 @@ const cookieParser = require("cookie-parser");
 const auth = require('./middleware/auth');
 const schools = require('./routes/schools');
 const School = require('./models/School');
-// const newSchool = require('./controllers/schoolController');
-// const schoolList = require('./controllers/schoolController');
-//const counselorRoutes = require("./routes/counselorRoutes");
 const sessionRoutes = require('./routes/sessionRoutes');
 const methodOverride = require('method-override');
 const secretWordRouter = require("./routes/secretWord");
 const csrfProtection = require("./middleware/csrfProtection");
 const storeLocals = require("./middleware/storeLocals");
 const path = require('path');
+const schoolController = require('./controllers/schoolController');
 
 const helmet = require('helmet');
 const xssClean = require('xss-clean');
@@ -90,12 +88,7 @@ app.use((req, res, next) => {
  
   app.use(storeLocals);  
   app.use("/schools", schools);  
-  app.use('/sessions', sessionRoutes);
-  // app.use('/new', newSchool);
-  // app.use('/schoolList', schoolList);
-  // app.use('/student', schools);
-  //app.use("/counselor", counselorRoutes);
-  
+  app.use('/sessions', sessionRoutes);  
   app.get("/", csrfProtection, (req, res) => {
       res.render("index", { csrfToken: req.csrfToken() });
   });
@@ -104,22 +97,9 @@ app.use((req, res, next) => {
     // Redirect to a job listing page, or handle as needed
     res.render('edit', { csrfToken: req.csrfToken() });
 });
-// Route for fetching schools with sorting
-app.get('/schools', async (req, res) => {
-  let sortField = req.query.sort || 'schoolName'; // Default sort field
-  let sortOrder = req.query.order === '-1' ? -1 : 1; // Toggle between ascending (1) and descending (-1)
 
-  try {
-    const schools = await School.find({}).sort({ [sortField]: sortOrder });
-    console.log(schools); // Log the schools data to the terminal
-    res.render('schoolList', { schools, sortField, sortOrder });
-  } catch (error) {
-    console.error("Error fetching schools:", error);
-    res.status(500).send("Error fetching schools");
-  }
-});
-//const auth = require("./middleware/auth");
-app.use("/secretWord", auth, secretWordRouter);
+app.get('/schools', schoolController.getSchools);// Route for fetching schools with sorting
+app.use("/secretWord", auth, secretWordRouter);//const auth = require("./middleware/auth");
 
 // Define a middleware for handling 404 errors
 app.use((req, res) => {  
