@@ -10,19 +10,27 @@ const getNewSchool = (req, res) => {
 };
 
 // GET all Schools for the current user
-const getSchools = async (req, res, next) => {
+const getSchools = async (req, res) => {
+    let { page, limit } = req.query;
+    page = parseInt(page, 6) || 1;
+    limit = parseInt(limit, 6) || 6; 
+
     try {
-        const schools = await School.find({ createdBy: req.user._id });   
-        console.log(schools); // line to log the fetched data    
-        res.render('schoolList', { schools: schools, csrfToken: req.csrfToken() });
+        const query = { createdBy: req.user._id };
+        const schools = await School.find(query)
+                                    .skip((page - 1) * limit)
+                                    .limit(limit);
+        const total = await School.countDocuments(query);
+        const pages = Math.ceil(total / limit);
+
+            res.render('schoolList', { schools, total, pages, current: page, csrfToken: req.csrfToken() });
     } catch (error) {
-        handleErrors(error, req, res);
+        handleErrors(error, req, res); 
         console.error('Error fetching schools:', error.message);
         console.error(error.stack); // Log the stack trace
         res.status(500).send('An error occurred while fetching schools');
     }
 };
-
 // POST a new school
 const addSchools = async (req, res, next) => {
     console.log(req.body); // Log the request body to ensure it's as expected

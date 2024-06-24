@@ -81,6 +81,17 @@
         <p>No schools found.</p>
       </div>
     <% } %>
+    <div class="container mt-4 pb-5" style="padding-bottom: 70px;"> 
+    <nav aria-label="Page navigation" style="margin-bottom: 50px;">
+      <ul class="pagination justify-content-center">
+        <% for(let i = 1; i <= pages; i++) { %>
+          <li class="page-item <%= i === current ? 'active' : '' %> <%= i > 1 ? 'ms-2' : '' %>">
+            <a class="page-link bg-secondary text-white" href="/schools?page=<%= i %>"><%= i %></a>
+          </li>
+        <% } %>
+      </ul>
+    </nav>
+  </div>
   </div>
 </div>
 <%- include("partials/footer.ejs") %>
