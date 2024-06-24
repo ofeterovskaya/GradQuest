@@ -22,6 +22,7 @@ const methodOverride = require('method-override');
 const secretWordRouter = require("./routes/secretWord");
 const csrfProtection = require("./middleware/csrfProtection");
 const storeLocals = require("./middleware/storeLocals");
+const path = require('path');
 
 const helmet = require('helmet');
 const xssClean = require('xss-clean');
@@ -64,6 +65,7 @@ app.use(flash()); // Add the connect-flash middleware
 app.use(cookieParser(process.env.SESSION_SECRET));
 app.use(express.urlencoded({ extended: false }));
 app.use(methodOverride('_method'));
+app.use('/styles', express.static(path.join(__dirname, 'styles')));// Serve static files from the "styles" directory
 
 // Security middlewares
 app.use(helmet());
