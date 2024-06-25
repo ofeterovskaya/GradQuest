@@ -158,6 +158,36 @@ const deleteSchools = async (req, res, next) => {
     }
 };
 
+// Function to fetch and render schools for a specific student or parent's child
+const getSchoolList = async (req, res) => {
+    try {
+      let userId = req.session.userId;
+      const user = await User.findById(userId);
+      if (user.role === 'Parent') {
+        userId = user.childId; // If the user is a Parent, use the child's ID instead
+      }
+      const schools = await School.find({ studentId: userId });// Find schools for the student
+      res.render('schoolList', { schools });// Render school list
+    } catch (error) {
+      console.error('Failed to fetch school list:', error);
+      res.status(500).send('An error occurred');
+    }
+  };
+
+// Function to display schools associated with a student's email
+const displayStudentSchools = async (req, res) => {
+    try {
+      const studentEmail = req.session.studentEmail;
+      // Logic to fetch schools associated with studentEmail
+      const schools = await findSchoolsByStudentEmail(studentEmail);
+      res.render('studentSchools', { schools });
+    } catch (error) {
+      console.error('Error fetching schools:', error);
+      res.status(500).send('Server error');
+    }
+  };
+
+
 module.exports = {
   getNewSchool,  
   getSchools,  
@@ -165,5 +195,7 @@ module.exports = {
   editSchools,
   getEditSchool,
   updateSchools,
-  deleteSchools
+  deleteSchools,
+  getSchoolList,
+  displayStudentSchools
 };

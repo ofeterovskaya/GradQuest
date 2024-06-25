@@ -9,6 +9,7 @@ const {
   registerDo,
   logoff,
   connectChild,
+  linkStudent
 } = require("../controllers/sessionController");
 
 router.route("/register")
@@ -28,6 +29,18 @@ router.route("/logoff")
 
 router.route('/connectStudent')
   .get(csrfProtection, connectChild);
+
+// Link Parent to Student route
+router.route("/link-student")
+  .post(csrfProtection, linkStudent);
+
+// Connect Child route
+router.route('/connect-child')
+  .get(csrfProtection, connectChild);
+
+// Logoff route
+router.route("/logoff")
+  .post(csrfProtection, logoff);
 
 
 module.exports = router;

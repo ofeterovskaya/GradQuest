@@ -43,18 +43,42 @@ const logoff = (req, res) => {
 const logonShow = (req, res) => {
     return req.user ? res.redirect("/") : res.render("logon", { csrfToken: req.csrfToken() });
 };
+// Function to link a Parent to a Student
+const linkStudent = async (req, res) => {
+  const { studentEmail } = req.body;
+  const parentEmail = req.user.email; // Assuming you have a way to get the current user's email
+  try {
+      const parent = await User.findOne({ email: parentEmail, role: 'parent' });
+      if (!parent) {
+          return res.status(404).send('Parent user not found');
+      }
+      const student = await User.findOne({ email: studentEmail, role: 'student' });
+      if (!student) {
+          return res.status(404).send('Student user not found');
+      }      
+      parent.childId = student._id;// Link the Student to the Parent
+      await parent.save();
+      res.send(`Linked ${studentEmail} to ${parentEmail} successfully.`);
+  } catch (error) {
+      console.error('Error linking Parent to Student:', error);
+      res.status(500).send('An error occurred while linking the users');
+  }
+};
 
+// Function to connect a Parent to a Student
 const connectChild = (req, res) => {
-  if (req.user && req.user.role === 'parent') {
-    res.render('connectStudent', { csrfToken: req.csrfToken() });
+  if (req.user.role === 'parent') {
+    res.render('connectChild', { csrfToken: req.csrfToken() });
   } else {
     res.redirect('/');
   }
 };
+
 module.exports = {
   registerShow,
   registerDo,
   logoff,
   logonShow,
-  connectChild
+  connectChild,
+  linkStudent
 }; 
