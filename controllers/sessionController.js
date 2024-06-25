@@ -43,9 +43,18 @@ const logoff = (req, res) => {
 const logonShow = (req, res) => {
     return req.user ? res.redirect("/") : res.render("logon", { csrfToken: req.csrfToken() });
 };
+
+const connectChild = (req, res) => {
+  if (req.user && req.user.role === 'parent') {
+    res.render('connectStudent', { csrfToken: req.csrfToken() });
+  } else {
+    res.redirect('/');
+  }
+};
 module.exports = {
   registerShow,
   registerDo,
   logoff,
   logonShow,
+  connectChild
 };

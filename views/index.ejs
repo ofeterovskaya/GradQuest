@@ -33,7 +33,7 @@
               <% if (user.role === 'parent') { 
                 %>If you are a parent click here to see your student's Quest progress<% }
                  else { %>You don't have permission to view this page.<% } %></p>
-            <a href="<% if (user.role === 'parent') { %>/connect-child<% } else { %>#<% } %>"
+            <a href="<% if (user.role === 'parent') { %>/connectStudent<% } else { %>#<% } %>"
                class="btn btn-success <% if (user.role !== 'parent') { %>disabled<% } %>" 
                style="background-color: #d1e7dd; color: #0c4128;">
                 <% if (user.role === 'parent') { %>View School List<% }

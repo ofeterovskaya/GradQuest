@@ -8,6 +8,7 @@ const {
   registerShow,
   registerDo,
   logoff,
+  connectChild,
 } = require("../controllers/sessionController");
 
 router.route("/register")
@@ -22,6 +23,11 @@ router.route("/logon")
     failureFlash: true,
   }));
 
-router.route("/logoff").post(csrfProtection, logoff);
+router.route("/logoff")
+  .post(csrfProtection, logoff);
+
+router.route('/connectStudent')
+  .get(csrfProtection, connectChild);
+
 
 module.exports = router;

@@ -5,7 +5,7 @@ const csrfProtection = require('../middleware/csrfProtection');
 const auth = require('../middleware/auth');
 const {
     getNewSchool,  
-    getSchools,  
+    getSchools, 
     addSchools,
     editSchools,
     getEditSchool,
@@ -14,13 +14,12 @@ const {
 } = require("../controllers/schoolController");
 const validateId = require("../middleware/validateId");
 
-
 router.route("/new")
     .get(auth, csrfProtection, getNewSchool)
     .post(auth, csrfProtection, addSchools);
 
 router.route("/")
-    .get(auth, csrfProtection, getSchools)
+    .get(auth, csrfProtection, getSchools) 
     .post(auth, csrfProtection, addSchools);
 
 router.route("/edit/:id")

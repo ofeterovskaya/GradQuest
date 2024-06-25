@@ -61,7 +61,7 @@ app.set("view engine", "ejs");// Set the view engine to ejs for rendering views
 app.use(bodyParser.urlencoded({ extended: true })); // Use body-parser middleware to parse incoming request bodies
 app.use(flash()); // Add the connect-flash middleware
 app.use(cookieParser(process.env.SESSION_SECRET));
-app.use(express.urlencoded({ extended: false }));
+app.use(express.urlencoded({ extended: true }));
 app.use(methodOverride('_method'));
 app.use('/styles', express.static(path.join(__dirname, 'styles')));// Serve static files from the "styles" directory
 
@@ -89,6 +89,7 @@ app.use((req, res, next) => {
   app.use(storeLocals);  
   app.use("/schools", schools);  
   app.use('/sessions', sessionRoutes);  
+  app.use('/', sessionRoutes);   
   app.get("/", csrfProtection, (req, res) => {
       res.render("index", { csrfToken: req.csrfToken() });
   });
@@ -98,7 +99,6 @@ app.use((req, res, next) => {
     res.render('edit', { csrfToken: req.csrfToken() });
 });
 
-app.get('/schools', schoolController.getSchools);// Route for fetching schools with sorting
 app.use("/secretWord", auth, secretWordRouter);//const auth = require("./middleware/auth");
 
 // Define a middleware for handling 404 errors
