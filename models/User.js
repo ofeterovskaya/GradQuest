@@ -25,12 +25,16 @@ const UserSchema = new mongoose.Schema({
         required: [true, 'Please provide a password'],
         minlength: 6
     },
-    role: {
-        type: String,
-        enum: ['student', 'parent', 'counselor'],
-        required: true
+    role: { 
+        type: String, 
+        enum: ['student', 'parent', 'counselor'], // Include all roles here
+        required: true 
     },
-
+    childId: { 
+        type: mongoose.Schema.Types.ObjectId, 
+        ref: 'User', 
+        required: false // Only required for Parent role, handle this logic in your application code
+    },
 })
 // Before saving the user, hash the password
 UserSchema.pre('save', async function () {

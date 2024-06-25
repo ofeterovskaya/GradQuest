@@ -5,11 +5,31 @@
   <div class="row">
     <div class="col-12 text-center">
       <h2>School List</h2>
-      <a href="/schools/new" class="btn btn-primary mb-3" style="background-color: #225222; color: white; font-size: larger;">Add New School</a>
-      <a href="https://bigfuture.collegeboard.org/scholarships" class="btn mb-3" style="font-size: larger; background-color: #f2f2f2">View Scholarships</a>
+      <% if (user.role === 'Parent') { %>
+        <!-- Simplified "Add New School" button for Parents -->
+        <a href="/schools/new/simple" class="btn btn-primary mb-3" style="background-color: #225222; color: white; font-size: larger;">
+          Add New School (Simplified)
+        </a>
+      <% } else { %>
+        <!-- Full "Add New School" button for Students -->
+        <a href="/schools/new" class="btn btn-primary mb-3" style="background-color: #225222; color: white; font-size: larger;">
+          Add New School
+        </a>
+      <% } %>
+      <a href="https://bigfuture.collegeboard.org/scholarships" 
+            class="btn mb-3"
+            style="font-size: larger; background-color: #f2f2f2">
+              View Scholarships
+      </a>
       <div style="text-align: right">
         <!-- Assume the initial sort order is ascending ('asc'). The server will toggle it based on the current state. -->
-        <a href="/schools?sort=schoolName&order=asc" id="sortByName" style="color: #225222">Sort by Name <i class="fas fa-arrow-up"></i><i class="fas fa-arrow-down"></i></a>
+        <a href="/schools?sort=schoolName&order=<%= sortOrder %>" 
+            id="sortByName" 
+            style="color: #225222">
+              Sort by Name 
+                <i class="fas fa-arrow-up"></i>
+                <i class="fas fa-arrow-down"></i>
+        </a>
       </div>
     </div>
   </div>
