@@ -3,6 +3,7 @@ const router = express.Router();
 const School = require('../models/School');
 const csrfProtection = require('../middleware/csrfProtection');
 const auth = require('../middleware/auth');
+const validateId = require("../middleware/validateId");
 const {
     getNewSchool,  
     getSchools, 
@@ -10,9 +11,8 @@ const {
     editSchools,
     getEditSchool,
     updateSchools,
-    deleteSchools          
+    deleteSchools,           
 } = require("../controllers/schoolController");
-const validateId = require("../middleware/validateId");
 
 router.route("/new")
     .get(auth, csrfProtection, getNewSchool)
@@ -31,5 +31,5 @@ router.route("/update/:id")
 
 router.route("/delete/:id")
     .post(auth, csrfProtection, validateId, deleteSchools);
-
+  
 module.exports = router;
