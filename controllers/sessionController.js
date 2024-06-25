@@ -57,4 +57,4 @@ module.exports = {
   logoff,
   logonShow,
   connectChild
-};
+}; 
