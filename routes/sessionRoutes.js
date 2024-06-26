@@ -8,6 +8,8 @@ const {
   registerShow,
   registerDo,
   logoff,
+  connectChild,
+  connectParentToStudent,  
 } = require("../controllers/sessionController");
 
 router.route("/register")
@@ -22,6 +24,14 @@ router.route("/logon")
     failureFlash: true,
   }));
 
-router.route("/logoff").post(csrfProtection, logoff);
+router.route("/logoff")
+  .post(csrfProtection, logoff);
+
+router.route('/connectStudent')
+  .get(csrfProtection, connectChild);
+
+// Route to handle form submission for connecting a Parent to a Student
+router.route('/connectStudent')
+  .post(csrfProtection, connectParentToStudent);
 
 module.exports = router;

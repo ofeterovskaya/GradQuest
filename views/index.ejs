@@ -1,50 +1,71 @@
-<%- include("partials/head.ejs") %>
+<%- include("partials/head.ejs") %> 
 <%- include("partials/header.ejs") %>
 <%- include("partials/navbar.ejs") %>
 
-<div class="container" style="height: 60vh;">
-  <div class="row h-100 justify-content-center align-items-center">
+<div class="container my-5"> 
+  <div class="row justify-content-center align-items-center" style="min-height: 60vh;"> 
     <% if (user) { %>
-      <!-- Quest Progress Link
-      <div class="col-12 text-center mb-4">
-        <a href="/jobs" class="btn" style="background-color: #d1e7dd; color: #0c4128;">Click this link to view your Quest progress.</a>
-      </div> -->
       <!-- Student Box -->
-      <div class="col-md-4">
+      <div class="col-md-4 mb-3"> 
         <div class="card" style="width: 18rem;">
           <div class="card-body">
             <h5 class="card-title">Student</h5>
-            <p class="card-text">If you are student click here to see your Quest progress</p>
-            <a href="/schools" class="btn" style="background-color: #d1e7dd; color: #0c4128;">View Quest Progress</a>
+            <p class="card-text">
+              <% if (user.role === 'student') { 
+                  %>If you are a student click here to see your Quest progress<% } 
+                  else { %>You don't have permission to view this page.<% } %>
+            </p>
+            <a href="<% if (user.role === 'student') { %>/schools<% } else { %>#<% } %>"
+               class="btn btn-success <% if (user.role !== 'student') { %>disabled<% } %>" 
+               style="background-color: #d1e7dd; color: #0c4128;">
+                <% if (user.role === 'student') { %>View Quest Progress<% } 
+                else { %>View Quest Progress<% } %>
+            </a> 
           </div>
         </div>
       </div>
       <!-- Parent Box -->
-      <div class="col-md-4">
-        <div class="card" style="width: 18rem;">
-          <div class="card-body" >
-            <h5 class="card-title">Parent</h5>
-            <p class="card-text">If you are parent click here to see your student's Quest progress</p>
-            <a href="#" class="btn" style="background-color: #d1e7dd; color: #0c4128; ">View Profile</a>
-          </div>
-        </div>
-      </div>
-      <!-- Counselor Box -->
-      <div class="col-md-4">
+      <div class="col-md-4 mb-3">
         <div class="card" style="width: 18rem;">
           <div class="card-body">
-            <h5 class="card-title">Counselor</h5>
-            <p class="card-text">If you are councelor, click here to add information for your student</p>
-            <a href="#" class="btn" style="background-color: #d1e7dd; color: #0c4128;">View Profile</a>
+            <h5 class="card-title">Parent</h5>
+            <p class="card-text">
+              <% if (user.role === 'parent') { 
+                %>If you are a parent click here to see your student's Quest progress<% }
+                 else { %>You don't have permission to view this page.<% } %></p>
+            <a href="<% if (user.role === 'parent') { %>/connectStudent<% } else { %>#<% } %>"
+               class="btn btn-success <% if (user.role !== 'parent') { %>disabled<% } %>" 
+               style="background-color: #d1e7dd; color: #0c4128;">
+                <% if (user.role === 'parent') { %>View School List<% }
+                 else { %>View School List<% } %>
+            </a>
           </div>
         </div>
       </div>
-    <% } else { %>
-      <div class="col-md-6 text-center">
-        <a href="/sessions/logon" class="btn mt-3" style="background-color: #d1e7dd; color: #0c4128; width: 60%;">Click this link to login.</a>
+      <!-- Counselor Box (Under Construction) -->
+      <div class="col-md-4 mb-3 position-relative">
+        <div class="card blur-effect" style="width: 18rem;">
+          <div class="card-body">
+            <h5 class="card-title">Counselor</h5>
+            <p class="card-text">This section is under construction.</p>
+            <a href="#" class="btn btn-success disabled" 
+                        style="background-color: #d1e7dd; color: #0c4128;">
+                          Under Construction
+            </a>
+          </div>
+          <div class="overlay">Under Construction</div>
+        </div>         
       </div>
-      <div class="col-md-6 text-center">
-        <a href="/sessions/register" class="btn btn-secondary mt-3" style="width: 60%;">Click this link to register.</a>
+    <% } else { %>
+      <!-- Login and Register Links for Users Not Logged In -->
+      <div class="col-md-6 text-center mb-3">
+        <a href="/sessions/logon" class="btn btn-success mt-3 w-75" 
+                                  style="background-color: #d1e7dd; color: #0c4128;">
+                                    Click this link to login.
+        </a> 
+      </div>
+      <div class="col-md-6 text-center mb-3">
+        <a href="/sessions/register" class="btn btn-secondary mt-3 w-75">Click this link to register.</a>
       </div>
     <% } %>
   </div>

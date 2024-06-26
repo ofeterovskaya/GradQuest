@@ -11,17 +11,16 @@ const passport = require("passport");
 const passportInit = require("./passport/passportInit");
 const bodyParser = require('body-parser');
 const cookieParser = require("cookie-parser");
-const auth = require('./middleware/auth');
+// const auth = require('./middleware/auth');
 const schools = require('./routes/schools');
-const School = require('./models/School');
-// const newSchool = require('./controllers/schoolController');
-// const schoolList = require('./controllers/schoolController');
-//const counselorRoutes = require("./routes/counselorRoutes");
+// const School = require('./models/School');
 const sessionRoutes = require('./routes/sessionRoutes');
 const methodOverride = require('method-override');
-const secretWordRouter = require("./routes/secretWord");
+//const secretWordRouter = require("./routes/secretWord");
 const csrfProtection = require("./middleware/csrfProtection");
 const storeLocals = require("./middleware/storeLocals");
+const path = require('path');
+// const schoolController = require('./controllers/schoolController');
 
 const helmet = require('helmet');
 const xssClean = require('xss-clean');
@@ -62,8 +61,9 @@ app.set("view engine", "ejs");// Set the view engine to ejs for rendering views
 app.use(bodyParser.urlencoded({ extended: true })); // Use body-parser middleware to parse incoming request bodies
 app.use(flash()); // Add the connect-flash middleware
 app.use(cookieParser(process.env.SESSION_SECRET));
-app.use(express.urlencoded({ extended: false }));
+app.use(express.urlencoded({ extended: true }));
 app.use(methodOverride('_method'));
+app.use('/styles', express.static(path.join(__dirname, 'styles')));// Serve static files from the "styles" directory
 
 // Security middlewares
 app.use(helmet());
@@ -88,12 +88,8 @@ app.use((req, res, next) => {
  
   app.use(storeLocals);  
   app.use("/schools", schools);  
-  app.use('/sessions', sessionRoutes);
-  // app.use('/new', newSchool);
-  // app.use('/schoolList', schoolList);
-  // app.use('/student', schools);
-  //app.use("/counselor", counselorRoutes);
-  
+  app.use('/sessions', sessionRoutes);  
+  app.use('/', sessionRoutes);   
   app.get("/", csrfProtection, (req, res) => {
       res.render("index", { csrfToken: req.csrfToken() });
   });
@@ -102,19 +98,8 @@ app.use((req, res, next) => {
     // Redirect to a job listing page, or handle as needed
     res.render('edit', { csrfToken: req.csrfToken() });
 });
-app.get('/schools', csrfProtection, async (req, res) => {
-  try {
-      const schools = await School.find();
-      console.log(schools); // Log the data to check the structure
-      res.render('schools/index', { schools, csrfToken: req.csrfToken() });
-  } catch (error) {
-      console.error('Error fetching schools:', error);
-      res.status(500).send('Internal Server Error');
-  }
-});
 
-//const auth = require("./middleware/auth");
-app.use("/secretWord", auth, secretWordRouter);
+//app.use("/secretWord", auth, secretWordRouter);//const auth = require("./middleware/auth");
 
 // Define a middleware for handling 404 errors
 app.use((req, res) => {  

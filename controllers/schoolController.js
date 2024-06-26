@@ -1,8 +1,7 @@
 const mongoose = require('mongoose');
 const School = require('../models/School');
 const handleErrors = require("../utils/parseValidationErrs");
-const csrfProtection = require("../middleware/csrfProtection");
-const newSchool = require('../controllers/schoolController');
+const User = require('../models/User');
 
 // GET a form for adding a new school
 const getNewSchool = (req, res) => {
@@ -10,67 +9,82 @@ const getNewSchool = (req, res) => {
 };
 
 // GET all Schools for the current user
-const getSchools = async (req, res, next) => {
+const getSchools = async (req, res) => {
+    let { page, limit, order, sort } = req.query;
+    page = parseInt(page) || 1;
+    limit = parseInt(limit) || 6;
+    const query = { createdBy: req.user._id };
+
+    // Toggle sortOrder based on the current request
+    const sortOrder = order === 'desc' ? -1 : 1;
     try {
-        const schools = await School.find({ createdBy: req.user._id });   
-        console.log(schools); // line to log the fetched data    
-        res.render('schoolList', { schools: schools, csrfToken: req.csrfToken() });
+        const schools = await School.find(query)
+                                    .sort({ [sort]: sortOrder })
+                                    .skip((page - 1) * limit)
+                                    .limit(limit);
+        const total = await School.countDocuments(query);
+        const pages = Math.ceil(total / limit);
+
+        // Determine the next sortOrder for the frontend link
+        const nextOrder = order === 'asc' ? 'desc' : 'asc';
+        res.render('schoolList', {
+            schools,
+            total,
+            pages,
+            current: page,
+            sortField: sort,
+            sortOrder: nextOrder, // Pass the nextOrder for the frontend to use
+            csrfToken: req.csrfToken()
+        });
     } catch (error) {
         handleErrors(error, req, res);
         console.error('Error fetching schools:', error.message);
-        console.error(error.stack); // Log the stack trace
+        console.error(error.stack);
         res.status(500).send('An error occurred while fetching schools');
     }
 };
-
-// // POST a new School
-// const addSchools = async (req, res, next) => {
-//     try {
-//         await School.create({ ...req.body, createdBy: req.user._id });
-//         res.redirect('/schools'); 
-//     } catch (error) {
-//         handleErrors(error, req, res);
-//     }
-// };
-
-// Simplified addSchools for debugging
+// POST a new school
 const addSchools = async (req, res, next) => {
     console.log(req.body); // Log the request body to ensure it's as expected
-    const { schoolName, gpaScore, satActScore, awards, clubs, sport, createdBy } = req.body;
+    const { schoolName, gpaScore, actScore, satActScore, scoreType,volunteering, awards, clubs, sport, createdBy } = req.body;
 
     // Validate GPA
     const gpa = parseFloat(gpaScore);
-    if (isNaN(gpa) || gpa > 4) {
-        return res.status(400).send("Invalid GPA. Maximum allowed value is 4.0.");
+    if (isNaN(gpa) || gpa > 5) {
+        return res.status(400).send("Invalid GPA. Maximum allowed value is 5.0.");
     }
-
-    // Assuming a simple conversion for SAT to ACT (for demonstration purposes)
-    const satToAct = (sat) => Math.min(36, Math.round(sat / 80)); // Example conversion
-    let actScore = parseInt(satActScore);
-    if (isNaN(actScore)) {
+    // Validate SAT/ACT score
+    const score = parseInt(satActScore);
+    if (isNaN(score)) {
         return res.status(400).send("Invalid SAT/ACT score.");
     }
-    // Convert SAT to ACT if necessary (assuming SAT scores are higher than 36)
-    if (actScore > 36) {
-        actScore = satToAct(actScore);
+    // Determine if the score is SAT or ACT based on its value
+    let testScores;
+    if (scoreType === "SAT") {
+        testScores = { SAT: score };
+    } else if (scoreType === "ACT") {
+        testScores = { ACT: score };
+    } else {
+        return res.status(400).send("Score type must be either SAT or ACT.");
     }
-
     try {
         const schoolData = {
-            ...req.body,
+            schoolName,
             gpa: gpaScore,
-            testScores: {
-                SAT: satActScore,
-                ACT: actScore.toString() // Ensure ACT score is within valid range
-            },
+            act:actScore,
+            testScores,
+            volunteering,
+            awards,
+            clubs,
+            sport,
             createdBy: req.user._id
         };
         await School.create(schoolData);
         console.log("School successfully added");
-        res.redirect('/schools'); 
+        res.redirect('/schools');
     } catch (error) {
-        console.error(error); // Ensure errors are logged
-        res.status(500).send("An error occurred");
+        console.error("Error adding school:", error);
+        res.status(500).send("An error occurred while adding the school.");
     }
 };
 // Edit a school
@@ -138,6 +152,71 @@ const deleteSchools = async (req, res, next) => {
     }
 };
 
+// Function to fetch and render schools for a specific student or parent's child
+const getSchoolList = async (req, res) => {
+    try {
+            let userId = req.session.userId;
+            const user = await User.findById(userId);
+            let studentId = req.query.studentId;
+            // Additional logging for debugging
+            console.log('User details:', user);
+            console.log('Initial studentId from query:', studentId);
+
+        if (user.role === 'parent' && !studentId) {
+            studentId = user.childId;
+        }
+        // If the user is a Parent and no studentId is provided, use the parent's childId
+        if (!studentId) {
+            console.log('No studentId provided');
+            return res.status(400).send('Student ID is required');
+        }
+        // Ensure studentId is available
+        if (!studentId) {
+            return res.status(400).send('Student ID is required');
+        }
+        // Log the studentId used for the query
+        console.log('Fetching schools for studentId:', studentId);
+
+        const schools = await School.find({ studentId: studentId });
+      //const schools = await School.find({ studentId: userId });// Find schools for the student
+      res.render('schoolList', { schools });// Render school list
+    } catch (error) {
+      console.error('Failed to fetch school list:', error);
+      res.status(500).send('An error occurred');
+    }
+  };
+const handleSchoolPost = async (req, res) => {
+    if (req.body.studentEmail) {
+      try {
+        const student = await User.findOne({ email: req.body.studentEmail, role: 'student' });
+        if (student) {
+            console.log('Student found:', student);
+            res.redirect(`/schools?studentId=${student._id}`);
+        } else {
+          res.status(404).send('Student not found');
+        }
+      } catch (error) {
+        console.error('Failed to find student:', error);
+        res.status(500).send('Internal Server Error');
+      }
+    } else {
+      getNewSchool(req, res);
+    }
+};
+// // Function to display schools associated with a student's email
+// const displayStudentSchools = async (req, res) => {
+//     try {
+//       const studentEmail = req.session.studentEmail;
+//       // Logic to fetch schools associated with studentEmail
+//       const schools = await findSchoolsByStudentEmail(studentEmail);
+//       res.render('studentSchools', { schools });
+//     } catch (error) {
+//       console.error('Error fetching schools:', error);
+//       res.status(500).send('Server error');
+//     }
+//   };
+
+
 module.exports = {
   getNewSchool,  
   getSchools,  
@@ -145,5 +224,8 @@ module.exports = {
   editSchools,
   getEditSchool,
   updateSchools,
-  deleteSchools
+  deleteSchools,
+  getSchoolList,
+  handleSchoolPost,
+  //displayStudentSchools
 };

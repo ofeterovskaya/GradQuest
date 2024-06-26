@@ -1,26 +1,27 @@
 const express = require("express");
 const router = express.Router();
-const School = require('../models/School');
 const csrfProtection = require('../middleware/csrfProtection');
 const auth = require('../middleware/auth');
+const validateId = require("../middleware/validateId");
 const {
     getNewSchool,  
-    getSchools,  
+    getSchools, 
     addSchools,
     editSchools,
     getEditSchool,
     updateSchools,
-    deleteSchools          
+    deleteSchools,
+    getSchoolList,
+    handleSchoolPost,
+    //displayStudentSchools            
 } = require("../controllers/schoolController");
-const validateId = require("../middleware/validateId");
-
 
 router.route("/new")
     .get(auth, csrfProtection, getNewSchool)
     .post(auth, csrfProtection, addSchools);
 
 router.route("/")
-    .get(auth, csrfProtection, getSchools)
+    .get(auth, csrfProtection, getSchools) 
     .post(auth, csrfProtection, addSchools);
 
 router.route("/edit/:id")
@@ -33,4 +34,14 @@ router.route("/update/:id")
 router.route("/delete/:id")
     .post(auth, csrfProtection, validateId, deleteSchools);
 
+// // Add the new route for /student-schools
+// router.route("/student-schools")
+//     .get(auth, csrfProtection, displayStudentSchools);
+
+// Route to display the list of schools
+router.route('/schools')
+  .get(csrfProtection, getSchoolList)
+  .post(auth, csrfProtection, handleSchoolPost);
+
+  
 module.exports = router;
