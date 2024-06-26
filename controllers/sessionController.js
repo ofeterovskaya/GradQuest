@@ -68,7 +68,7 @@ const linkStudent = async (req, res) => {
 // Function to connect a Parent to a Student
 const connectChild = (req, res) => {
   if (req.user.role === 'parent') {
-    res.render('connectChild', { csrfToken: req.csrfToken() });
+    res.render('connectStudent', { csrfToken: req.csrfToken() });
   } else {
     res.redirect('/');
   }
