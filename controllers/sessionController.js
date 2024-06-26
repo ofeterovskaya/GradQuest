@@ -73,6 +73,26 @@ const connectChild = (req, res) => {
     res.redirect('/');
   }
 };
+// Connect a Parent to a Student
+const connectParentToStudent = async (req, res) => {
+  const parentEmail = req.user.email; 
+  const studentEmail = req.body.studentEmail; // The Student's email entered in the form
+    try {
+        // Find the Student by email
+        const student = await User.findOne({ email: studentEmail, role: 'student' });
+        if (!student) {
+            return res.status(404).send('Student not found');
+        }
+        // Update the Parent's childId to reference the Student's ID
+        await User.findOneAndUpdate({ email: parentEmail, role: 'parent' }, { childId: student._id });
+
+        // Redirect to the /schools page with the Student's ID
+        res.redirect(`/schools?studentId=${student._id}`);
+    } catch (error) {
+        console.error('Error connecting Parent to Student:', error);
+        res.status(500).send('Server error');
+    }
+};
 
 module.exports = {
   registerShow,
@@ -80,5 +100,5 @@ module.exports = {
   logoff,
   logonShow,
   connectChild,
-  linkStudent
+  connectParentToStudent
 }; 

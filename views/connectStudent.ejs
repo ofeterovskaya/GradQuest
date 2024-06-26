@@ -4,11 +4,15 @@
 
 <div class="d-flex flex-column align-items-center justify-content-center" style="width: 100%; height: 70vh;">
   <div style="width: 30%; padding: 20px; background-color: #fff; box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.1);">
-    <h4>Connect to Your Student's List</h4>
-    <form action="/schools" method="POST">
+    <h4>Connect to Your Student's List</h4>    
+    <!-- //CHECK THIS ROUTE -->
+    <form action="/sessions/connectStudent" method="POST">  
+      <input type="hidden" name="_csrf" value="<%= csrfToken %>" />
+      <div class="mb-3">
+        <label for="studentEmail" class="form-label
     <input type="hidden" name="_csrf" value="<%= csrfToken %>" />
       <div class="mb-3">
-        <label for="studentEmail" class="form-label">Student's Email</label>
+        <label for="studentEmail" class="form-label">Enter your student's email to connect to their school list</label>
         <input type="email" class="form-control" id="studentEmail" name="studentEmail" required>
       </div>
       <div class="d-flex justify-content-center">
