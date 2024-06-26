@@ -27,11 +27,9 @@ router.route("/logon")
 router.route("/logoff")
   .post(csrfProtection, logoff);
 
-router.route('/connectStudent')
-  .get(csrfProtection, connectChild);
-
 // Route to handle form submission for connecting a Parent to a Student
 router.route('/connectStudent')
+  .get(csrfProtection, connectChild)
   .post(csrfProtection, connectParentToStudent);
 
 module.exports = router;
