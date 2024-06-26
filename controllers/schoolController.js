@@ -3,6 +3,7 @@ const School = require('../models/School');
 const handleErrors = require("../utils/parseValidationErrs");
 const csrfProtection = require("../middleware/csrfProtection");
 const newSchool = require('../controllers/schoolController');
+const User = require('../models/User');
 
 // GET a form for adding a new school
 const getNewSchool = (req, res) => {
@@ -161,31 +162,67 @@ const deleteSchools = async (req, res, next) => {
 // Function to fetch and render schools for a specific student or parent's child
 const getSchoolList = async (req, res) => {
     try {
-      let userId = req.session.userId;
-      const user = await User.findById(userId);
-      if (user.role === 'Parent') {
-        userId = user.childId; // If the user is a Parent, use the child's ID instead
-      }
-      const schools = await School.find({ studentId: userId });// Find schools for the student
+            let userId = req.session.userId;
+            const user = await User.findById(userId);
+            let studentId = req.query.studentId;
+            // Additional logging for debugging
+            console.log('User details:', user);
+            console.log('Initial studentId from query:', studentId);
+
+        if (user.role === 'Parent' && !studentId) {
+            studentId = user.childId;
+        }
+        // If the user is a Parent and no studentId is provided, use the parent's childId
+        if (!studentId) {
+            console.log('No studentId provided');
+            return res.status(400).send('Student ID is required');
+        }
+
+        // Ensure studentId is available
+        if (!studentId) {
+            return res.status(400).send('Student ID is required');
+        }
+        // Log the studentId used for the query
+        console.log('Fetching schools for studentId:', studentId);
+
+        const schools = await School.find({ studentId: studentId });
+      //const schools = await School.find({ studentId: userId });// Find schools for the student
       res.render('schoolList', { schools });// Render school list
     } catch (error) {
       console.error('Failed to fetch school list:', error);
       res.status(500).send('An error occurred');
     }
   };
-
-// Function to display schools associated with a student's email
-const displayStudentSchools = async (req, res) => {
-    try {
-      const studentEmail = req.session.studentEmail;
-      // Logic to fetch schools associated with studentEmail
-      const schools = await findSchoolsByStudentEmail(studentEmail);
-      res.render('studentSchools', { schools });
-    } catch (error) {
-      console.error('Error fetching schools:', error);
-      res.status(500).send('Server error');
+  const handleSchoolPost = async (req, res) => {
+    if (req.body.studentEmail) {
+      try {
+        const student = await User.findOne({ email: req.body.studentEmail, role: 'student' });
+        if (student) {
+            console.log('Student found:', student);
+            res.redirect(`/schools?studentId=${student._id}`);
+        } else {
+          res.status(404).send('Student not found');
+        }
+      } catch (error) {
+        console.error('Failed to find student:', error);
+        res.status(500).send('Internal Server Error');
+      }
+    } else {
+      getNewSchool(req, res);
     }
   };
+// // Function to display schools associated with a student's email
+// const displayStudentSchools = async (req, res) => {
+//     try {
+//       const studentEmail = req.session.studentEmail;
+//       // Logic to fetch schools associated with studentEmail
+//       const schools = await findSchoolsByStudentEmail(studentEmail);
+//       res.render('studentSchools', { schools });
+//     } catch (error) {
+//       console.error('Error fetching schools:', error);
+//       res.status(500).send('Server error');
+//     }
+//   };
 
 
 module.exports = {
@@ -197,5 +234,6 @@ module.exports = {
   updateSchools,
   deleteSchools,
   getSchoolList,
-  displayStudentSchools
+  handleSchoolPost,
+  //displayStudentSchools
 };

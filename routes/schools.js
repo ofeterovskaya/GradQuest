@@ -13,7 +13,8 @@ const {
     updateSchools,
     deleteSchools,
     getSchoolList,
-    displayStudentSchools            
+    handleSchoolPost,
+    //displayStudentSchools            
 } = require("../controllers/schoolController");
 
 router.route("/new")
@@ -34,21 +35,14 @@ router.route("/update/:id")
 router.route("/delete/:id")
     .post(auth, csrfProtection, validateId, deleteSchools);
 
-// Add the new route for /student-schools
-router.route("/student-schools")
-    .get(auth, csrfProtection, displayStudentSchools);
+// // Add the new route for /student-schools
+// router.route("/student-schools")
+//     .get(auth, csrfProtection, displayStudentSchools);
 
 // Route to display the list of schools
 router.route('/schools')
   .get(csrfProtection, getSchoolList)
-  .post(auth, csrfProtection, (req, res) => {
-    if (req.body.studentEmail) {
-      // Logic for handling studentEmail
-      res.redirect('/student-schools');
-    } else {      
-      getNewSchool(req, res);
-    }
-  });
+  .post(auth, csrfProtection, handleSchoolPost);
 
   
 module.exports = router;
