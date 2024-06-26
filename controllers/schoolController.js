@@ -1,8 +1,6 @@
 const mongoose = require('mongoose');
 const School = require('../models/School');
 const handleErrors = require("../utils/parseValidationErrs");
-const csrfProtection = require("../middleware/csrfProtection");
-const newSchool = require('../controllers/schoolController');
 const User = require('../models/User');
 
 // GET a form for adding a new school
@@ -19,7 +17,6 @@ const getSchools = async (req, res) => {
 
     // Toggle sortOrder based on the current request
     const sortOrder = order === 'desc' ? -1 : 1;
-
     try {
         const schools = await School.find(query)
                                     .sort({ [sort]: sortOrder })
@@ -30,7 +27,6 @@ const getSchools = async (req, res) => {
 
         // Determine the next sortOrder for the frontend link
         const nextOrder = order === 'asc' ? 'desc' : 'asc';
-
         res.render('schoolList', {
             schools,
             total,
@@ -57,42 +53,39 @@ const addSchools = async (req, res, next) => {
     if (isNaN(gpa) || gpa > 5) {
         return res.status(400).send("Invalid GPA. Maximum allowed value is 5.0.");
     }
-
-// Validate SAT/ACT score
-const score = parseInt(satActScore);
-if (isNaN(score)) {
-    return res.status(400).send("Invalid SAT/ACT score.");
-}
-
-// Determine if the score is SAT or ACT based on its value
-let testScores;
-if (scoreType === "SAT") {
-    testScores = { SAT: score };
-} else if (scoreType === "ACT") {
-    testScores = { ACT: score };
-} else {
-    return res.status(400).send("Score type must be either SAT or ACT.");
-}
-
-try {
-    const schoolData = {
-        schoolName,
-        gpa: gpaScore,
-        act:actScore,
-        testScores,
-        volunteering,
-        awards,
-        clubs,
-        sport,
-        createdBy: req.user._id
-    };
-    await School.create(schoolData);
-    console.log("School successfully added");
-    res.redirect('/schools');
-} catch (error) {
-    console.error("Error adding school:", error);
-    res.status(500).send("An error occurred while adding the school.");
-}
+    // Validate SAT/ACT score
+    const score = parseInt(satActScore);
+    if (isNaN(score)) {
+        return res.status(400).send("Invalid SAT/ACT score.");
+    }
+    // Determine if the score is SAT or ACT based on its value
+    let testScores;
+    if (scoreType === "SAT") {
+        testScores = { SAT: score };
+    } else if (scoreType === "ACT") {
+        testScores = { ACT: score };
+    } else {
+        return res.status(400).send("Score type must be either SAT or ACT.");
+    }
+    try {
+        const schoolData = {
+            schoolName,
+            gpa: gpaScore,
+            act:actScore,
+            testScores,
+            volunteering,
+            awards,
+            clubs,
+            sport,
+            createdBy: req.user._id
+        };
+        await School.create(schoolData);
+        console.log("School successfully added");
+        res.redirect('/schools');
+    } catch (error) {
+        console.error("Error adding school:", error);
+        res.status(500).send("An error occurred while adding the school.");
+    }
 };
 // Edit a school
 const editSchools = async (req, res) => {
@@ -169,7 +162,7 @@ const getSchoolList = async (req, res) => {
             console.log('User details:', user);
             console.log('Initial studentId from query:', studentId);
 
-        if (user.role === 'Parent' && !studentId) {
+        if (user.role === 'parent' && !studentId) {
             studentId = user.childId;
         }
         // If the user is a Parent and no studentId is provided, use the parent's childId
@@ -177,7 +170,6 @@ const getSchoolList = async (req, res) => {
             console.log('No studentId provided');
             return res.status(400).send('Student ID is required');
         }
-
         // Ensure studentId is available
         if (!studentId) {
             return res.status(400).send('Student ID is required');
@@ -193,7 +185,7 @@ const getSchoolList = async (req, res) => {
       res.status(500).send('An error occurred');
     }
   };
-  const handleSchoolPost = async (req, res) => {
+const handleSchoolPost = async (req, res) => {
     if (req.body.studentEmail) {
       try {
         const student = await User.findOne({ email: req.body.studentEmail, role: 'student' });
@@ -210,7 +202,7 @@ const getSchoolList = async (req, res) => {
     } else {
       getNewSchool(req, res);
     }
-  };
+};
 // // Function to display schools associated with a student's email
 // const displayStudentSchools = async (req, res) => {
 //     try {

@@ -11,16 +11,16 @@ const passport = require("passport");
 const passportInit = require("./passport/passportInit");
 const bodyParser = require('body-parser');
 const cookieParser = require("cookie-parser");
-const auth = require('./middleware/auth');
+// const auth = require('./middleware/auth');
 const schools = require('./routes/schools');
-const School = require('./models/School');
+// const School = require('./models/School');
 const sessionRoutes = require('./routes/sessionRoutes');
 const methodOverride = require('method-override');
-const secretWordRouter = require("./routes/secretWord");
+//const secretWordRouter = require("./routes/secretWord");
 const csrfProtection = require("./middleware/csrfProtection");
 const storeLocals = require("./middleware/storeLocals");
 const path = require('path');
-const schoolController = require('./controllers/schoolController');
+// const schoolController = require('./controllers/schoolController');
 
 const helmet = require('helmet');
 const xssClean = require('xss-clean');
@@ -99,7 +99,7 @@ app.use((req, res, next) => {
     res.render('edit', { csrfToken: req.csrfToken() });
 });
 
-app.use("/secretWord", auth, secretWordRouter);//const auth = require("./middleware/auth");
+//app.use("/secretWord", auth, secretWordRouter);//const auth = require("./middleware/auth");
 
 // Define a middleware for handling 404 errors
 app.use((req, res) => {  

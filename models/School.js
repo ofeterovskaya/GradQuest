@@ -4,12 +4,12 @@ const SchoolSchema = new mongoose.Schema({
     schoolName: {
         type: String,
         required: [true, 'Please provide School name'],
-        maxlength: 100, // Adjusted to allow for longer school names if necessary
+        maxlength: 100, 
     },
     testScores: {
         SAT: {
             type: Number,
-            min: 400, // Assuming SAT scores range from 400 to 1600
+            min: 400, 
             max: 1600,
             required: function() { return !this.testScores.ACT; } // Required if ACT is not provided
         },
@@ -24,30 +24,30 @@ const SchoolSchema = new mongoose.Schema({
         type: Number,
         required: [true, 'Please provide current GPA'],
         min: 0.0,
-        max: 4.0 // Assuming a scale of 0.0 to 4.0 for GPA
+        max: 5.0 
     },
     activities: {
-        type: [String], // Array of strings to list multiple activities
+        type: [String], 
         default: []
     },
     volunteering: {
-        type: [String], // Array of strings to list multiple volunteering experiences
+        type: [String], 
         default: []
     },
     position: {
-        type: [String], // Array of strings to list multiple positions held
+        type: [String], 
         default: []
     },
     awards: {
-        type: [String], // Array of strings to list multiple awards
+        type: [String], 
         default: []
     },
     clubs: {
-        type: [String], // Array of strings to list multiple clubs
+        type: [String], 
         default: []
     },
     sport: {
-        type: [String], // Array of strings to list multiple sports
+        type: [String], 
         default: []
     },
     createdBy: {

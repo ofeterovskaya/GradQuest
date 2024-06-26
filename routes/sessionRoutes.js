@@ -9,7 +9,7 @@ const {
   registerDo,
   logoff,
   connectChild,
-  connectParentToStudent
+  connectParentToStudent,  
 } = require("../controllers/sessionController");
 
 router.route("/register")
