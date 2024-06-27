@@ -53,7 +53,7 @@ const connectParentToStudent = async (req, res) => {
   const studentEmail = req.body.studentEmail; // The Student's email entered in the form
     try {
         // Find the Student by email
-        const student = await User.findOne({ email: studentEmail, role: 'student' });
+        const student = await User.findOne({ email: studentEmail, role: 'student' });      
         if (!student) {
             return res.status(404).send('Student not found');
         }

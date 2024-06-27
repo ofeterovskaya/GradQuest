@@ -99,8 +99,6 @@ app.use((req, res, next) => {
     res.render('edit', { csrfToken: req.csrfToken() });
 });
 
-//app.use("/secretWord", auth, secretWordRouter);//const auth = require("./middleware/auth");
-
 // Define a middleware for handling 404 errors
 app.use((req, res) => {  
     res.status(404).send(`That page (${req.url}) was not found.`);

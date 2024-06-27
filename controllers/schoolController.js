@@ -4,7 +4,7 @@ const handleErrors = require("../utils/parseValidationErrs");
 const User = require('../models/User');
 
 // GET a form for adding a new school
-const getNewSchool = (req, res) => {
+const getNewSchool = (req, res) => {    
     res.render('newSchool', { school: null, csrfToken: req.csrfToken() });
 };
 
@@ -151,70 +151,6 @@ const deleteSchools = async (req, res, next) => {
         handleErrors(error, req, res, '/schools');
     }
 };
-
-// Function to fetch and render schools for a specific student or parent's child
-const getSchoolList = async (req, res) => {
-    try {
-      let userId = req.session.userId;
-      const user = await User.findById(userId);
-      let studentId = req.query.studentId;
-      // Additional logging for debugging
-      console.log('User details:', user);
-      console.log('Initial studentId from query:', studentId);
-  
-      // If the user is a Parent and no studentId is provided in the query, use the parent's childId
-      if (user.role === 'parent' && !studentId) {
-        studentId = user.childId;
-      }
-  
-      // Log the final studentId used for the query
-      console.log('Fetching schools for studentId:', studentId);
-  
-      // Ensure studentId is available, after attempting to set it from user.childId
-      if (!studentId) {
-        console.log('No studentId provided');
-        return res.status(400).send('Student ID is required');
-      }
-  
-      const schools = await School.find({ studentId: studentId });
-      res.render('schoolList', { schools }); // Render school list
-    } catch (error) {
-      console.error('Failed to fetch school list:', error);
-      res.status(500).send('An error occurred');
-    }
-  };
-const handleSchoolPost = async (req, res) => {
-    if (req.body.studentEmail) {
-      try {
-        const student = await User.findOne({ email: req.body.studentEmail, role: 'student' });
-        if (student) {
-            console.log('Student found:', student);
-            res.redirect(`/schools?studentId=${student._id}`);
-        } else {
-          res.status(404).send('Student not found');
-        }
-      } catch (error) {
-        console.error('Failed to find student:', error);
-        res.status(500).send('Internal Server Error');
-      }
-    } else {
-      getNewSchool(req, res);
-    }
-};
-// // Function to display schools associated with a student's email
-// const displayStudentSchools = async (req, res) => {
-//     try {
-//       const studentEmail = req.session.studentEmail;
-//       // Logic to fetch schools associated with studentEmail
-//       const schools = await findSchoolsByStudentEmail(studentEmail);
-//       res.render('studentSchools', { schools });
-//     } catch (error) {
-//       console.error('Error fetching schools:', error);
-//       res.status(500).send('Server error');
-//     }
-//   };
-
-
 module.exports = {
   getNewSchool,  
   getSchools,  
@@ -222,8 +158,5 @@ module.exports = {
   editSchools,
   getEditSchool,
   updateSchools,
-  deleteSchools,
-  getSchoolList,
-  handleSchoolPost,
-  //displayStudentSchools
+  deleteSchools,    
 };
