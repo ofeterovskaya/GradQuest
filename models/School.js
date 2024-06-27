@@ -9,13 +9,13 @@ const SchoolSchema = new mongoose.Schema({
     testScores: {
         SAT: {
             type: Number,
-            min: 400, 
+            min: 0, 
             max: 1600,
             required: function() { return !this.testScores.ACT; } // Required if ACT is not provided
         },
         ACT: {
             type: Number,
-            min: 1, // Assuming ACT scores range from 1 to 36
+            min: 0, // Assuming ACT scores range from 1 to 36
             max: 36,
             required: function() { return !this.testScores.SAT; } // Required if SAT is not provided
         }
