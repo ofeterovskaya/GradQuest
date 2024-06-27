@@ -7,12 +7,12 @@
       <h2>School List</h2>
       <% if (user.role === 'parent') { %>
         <!-- Simplified "Add New School" button for Parents -->
-        <a href="/schools/new/" class="btn btn-primary mb-3" style="background-color: #225222; color: white; font-size: larger;">
-          Add New School 
+        <a href="/schools/addSchool" class="btn btn-primary mb-3" style="background-color:#468669; font-size: larger;">
+          Add New School(byParent) 
         </a>
       <% } else { %>
         <!-- Full "Add New School" button for Students -->
-        <a href="/schools/new" class="btn btn-primary mb-3" style="background-color: #225222; color: white; font-size: larger;">
+        <a href="/schools/new" class="btn btn-primary mb-3" style="background-color:#468669; font-size: larger;">
           Add New School
         </a>
       <% } %>
