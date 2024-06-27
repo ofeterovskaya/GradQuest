@@ -13,9 +13,17 @@ const getSchools = async (req, res) => {
     let { page, limit, order, sort } = req.query;
     page = parseInt(page) || 1;
     limit = parseInt(limit) || 6;
-    const query = { createdBy: req.user._id };
+    let query;
 
-    // Toggle sortOrder based on the current request
+    // Check if the user is a parent or a student
+    if (req.user.role === 'parent') {
+        // If the user is a parent, use the childId to find schools
+        query = { createdBy: req.user.childId };
+    } else {
+        // If the user is a student, use the student's _id to find schools
+        query = { createdBy: req.user._id };
+    }
+
     const sortOrder = order === 'desc' ? -1 : 1;
     try {
         const schools = await School.find(query)
@@ -24,16 +32,15 @@ const getSchools = async (req, res) => {
                                     .limit(limit);
         const total = await School.countDocuments(query);
         const pages = Math.ceil(total / limit);
-
-        // Determine the next sortOrder for the frontend link
         const nextOrder = order === 'asc' ? 'desc' : 'asc';
+
         res.render('schoolList', {
             schools,
             total,
             pages,
             current: page,
             sortField: sort,
-            sortOrder: nextOrder, // Pass the nextOrder for the frontend to use
+            sortOrder: nextOrder,
             csrfToken: req.csrfToken()
         });
     } catch (error) {
