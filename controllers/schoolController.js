@@ -74,6 +74,13 @@ const addSchools = async (req, res, next) => {
         return res.status(400).send("Score type must be either SAT or ACT.");
     }
     try {
+        //check if the user is a parent or a student       
+        //check if parent has childID if childId exicts
+        if(req.user.role ==='parent' && !req.user.childId ){
+            throw new Error('Parent does not have a childId');
+        }
+        //throw error if childId does not exist
+       
         const schoolData = {
             schoolName,
             gpa: gpaScore,
@@ -83,8 +90,8 @@ const addSchools = async (req, res, next) => {
             awards,
             clubs,
             sport,
-            createdBy: req.user._id
-        };
+            createdBy:  req.user.childId || req.user._id};
+
         await School.create(schoolData);
         console.log("School successfully added");
         res.redirect('/schools');
