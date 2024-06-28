@@ -1,19 +1,24 @@
 /* styles/styles.css */
 .overlay {
-    position: absolute;
-    top: 0;
-    left: 0;
-    padding: 2rem;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(255, 255, 255, 0.1); /* Semi-transparent white background */
-    backdrop-filter: blur(2px); /* Blur effect */
-    color: red; /* Red text color */
-    font-size: 1.5rem;
-    font-weight: bold;
-    z-index: 1; /* Ensure the overlay is above the card content */
-    display: flex; /* Use Flexbox for centering */
-    justify-content: center; /* Center horizontally */
-    align-items: center; /* Center vertically */
-    text-align: center;
+  position: absolute;
+  top: 0;
+  left: 0;
+  padding: 2rem;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(
+    255,
+    255,
+    255,
+    0.1
+  ); /* Semi-transparent white background */
+  backdrop-filter: blur(2px); /* Blur effect */
+  color: red; /* Red text color */
+  font-size: 1.5rem;
+  font-weight: bold;
+  z-index: 1; /* Ensure the overlay is above the card content */
+  display: flex; /* Use Flexbox for centering */
+  justify-content: center; /* Center horizontally */
+  align-items: center; /* Center vertically */
+  text-align: center;
 }

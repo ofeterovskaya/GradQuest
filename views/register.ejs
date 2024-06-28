@@ -1,8 +1,17 @@
-<%- include("partials/head.ejs") %>
-<%- include("partials/header.ejs") %>
-<%- include("partials/navbar.ejs") %>
-<div class="d-flex flex-column align-items-center justify-content-center" style="width: 100%; height: 70vh;">
-  <div style="width: 30%; padding: 20px; background-color: #fff; box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.1);">
+<%- include("partials/head.ejs") %> <%- include("partials/header.ejs") %> <%-
+include("partials/navbar.ejs") %>
+<div
+  class="d-flex flex-column align-items-center justify-content-center"
+  style="width: 100%; height: 70vh"
+>
+  <div
+    style="
+      width: 30%;
+      padding: 20px;
+      background-color: #fff;
+      box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.1);
+    "
+  >
     <form method="POST">
       <input type="hidden" name="_csrf" value="<%= csrfToken %>" />
       <div class="form-group">
@@ -15,11 +24,21 @@
       </div>
       <div class="form-group">
         <label for="password">Enter your password:</label>
-        <input type="password" name="password" id="password" class="form-control" />
+        <input
+          type="password"
+          name="password"
+          id="password"
+          class="form-control"
+        />
       </div>
       <div class="form-group">
         <label for="password1">Confirm your password:</label>
-        <input type="password" name="password1" id="password1" class="form-control" />
+        <input
+          type="password"
+          name="password1"
+          id="password1"
+          class="form-control"
+        />
       </div>
       <div class="form-group">
         <label for="role">Select your role:</label>
@@ -30,13 +49,16 @@
         </select>
       </div>
       <div>
-        <button 
-          type="submit" 
-          class="btn mt-3" 
-          style="background-color: #d1e7dd; color: #0c4128; width: 100%;">
-            Register
+        <button
+          type="submit"
+          class="btn mt-3"
+          style="background-color: #d1e7dd; color: #0c4128; width: 100%"
+        >
+          Register
         </button>
-        <a href="/" class="btn btn-secondary mt-3" style="width: 100%;">Cancel</a>
+        <a href="/" class="btn btn-secondary mt-3" style="width: 100%"
+          >Cancel</a
+        >
       </div>
     </form>
   </div>
