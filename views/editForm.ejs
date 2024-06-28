@@ -18,7 +18,6 @@
                  value="<%= school ? school.schoolName : '' %>" required
             >
         </div>
-
         <div class="row">
           <!-- First Column -->
           <div class="col-md-6 mb-1">
@@ -27,9 +26,9 @@
                  id="satActScore" 
                  name="satActScore" 
                  class="form-control" 
-                 value="<%= school ? school.satActScore : '' %>" required
+                 value="<%= school && school.testScores ? (school.testScores.SAT 
+                 ? school.testScores.SAT : (school.testScores.ACT ? school.testScores.ACT : '')) : '' %>" required
             >
-
             <label for="volunteering" class="form-label">Volunteering:</label>
             <input type="text" 
                  id="volunteering" 
@@ -37,7 +36,6 @@
                  class="form-control" 
                  value="<%= school ? school.volunteering : '' %>" required
             >
-
             <label for="clubs" class="form-label">Clubs:</label>
             <input type="text" 
                  id="clubs" 
@@ -46,17 +44,15 @@
                  value="<%= school ? school.clubs : '' %>" required
             >
           </div>
-
           <!-- Second Column -->
           <div class="col-md-6 mb-1">
             <label for="gpaScore" class="form-label">GPA Score:</label>
             <input type="text" 
                  id="gpaScore" 
-                 name="gpaScore" 
+                 name="GPA" 
                  class="form-control" 
-                 value="<%= school ? school.gpaScore : '' %>" required
+                 value="<%= school ? school.gpa : '' %>" required
             >
-
             <label for="awards" class="form-label">Awards:</label>
             <input type="text" 
                  id="awards" 
@@ -64,7 +60,6 @@
                  class="form-control" 
                  value="<%= school ? school.awards : '' %>" required
             >
-
             <label for="sport" class="form-label">Sport:</label>
             <input type="text" 
                  id="sport" 
@@ -74,7 +69,6 @@
             >
           </div>
         </div>
-
         <div class="d-flex justify-content-center mt-3">
           <input type="submit" 
                  value="<%= school ? 'Update School' : 'Add School' %>" 

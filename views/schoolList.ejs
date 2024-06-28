@@ -82,6 +82,10 @@
                   <strong>Sport:</strong>
                   <span><%= school.sport %></span>
                 </div>
+                 <div style="display: flex; justify-content: space-between;">
+                  <strong>School Creation Date:</strong>
+                  <span><%= new Date(school.schoolCreationDate).toLocaleDateString("en-US") %></span>
+                </div>
               </div>
             </div>
             <!-- Second Box: Action Buttons -->

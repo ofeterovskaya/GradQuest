@@ -120,7 +120,11 @@ const getEditSchool = async (req, res) => {
     try {
         const school = await School.findById(req.params.id);
         if (school) {
-            res.render('editForm', { school: school, csrfToken: req.csrfToken() });
+            // Directly pass the school object as it includes testScores and gpa
+            res.render('editForm', { 
+                school: school, // This includes testScores (SAT, ACT) and gpa
+                csrfToken: req.csrfToken() 
+            });
         } else {
             throw new Error('School not found');
         }
@@ -181,5 +185,5 @@ module.exports = {
   getEditSchool,
   updateSchools,
   deleteSchools,  
-  addSchoolForm
+  addSchoolForm,  
 };

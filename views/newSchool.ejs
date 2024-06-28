@@ -4,17 +4,15 @@
 
 <div class="container mt-3">
     <h3 class="text-center">Add a New School</h3>
-
     <div class="row justify-content-center">
-        <div class="col-md-6">
+        <div class="col-md-8"> <!-- Adjusted column size to accommodate two columns inside -->
             <form action="/schools" method="POST" class="mt-1">
                 <input type="hidden" name="_csrf" value="<%= csrfToken %>" />
                 <!-- School Information Section -->
                 <div class="mb-1">
                     <label for="schoolName" class="form-label">School Name:</label>
                     <input type="text" id="schoolName" name="schoolName" class="form-control" required>
-                </div>
-                
+                </div>                
                 <div class="row">
                     <div class="col-md-6 mb-1">
                         <label for="satActScore" class="form-label">SAT/ACT Score:</label>
@@ -35,37 +33,38 @@
                             </label>
                         </div>
                     </div>
-                    <div class="col-md-6 mb-1">
-                    <label for="gpaScore" class="form-label">GPA Score:</label>
-                    <input type="text" id="gpaScore" name="gpaScore" class="form-control" required>
-                    </div>
-                </div>
-                
+                </div>                
                 <!-- Achievements Section -->
                 <div class="row">
-                    <div class="col-md-6 mb-1">
-                        <label for="volunteering" class="form-label">Volunteering:</label>
-                        <input type="text" id="volunteering" name="volunteering" class="form-control" required>
+                    <div class="col-md-6">
+                        <div class="mb-1">
+                            <label for="gpaScore" class="form-label">GPA Score:</label>
+                            <input type="text" id="gpaScore" name="gpaScore" class="form-control" required>
                         </div>
-                    <div class="col-md-6 mb-1">
-                        <label for="awards" class="form-label">Awards:</label>
-                        <input type="text" id="awards" name="awards" class="form-control" required>
+                        <div class="mb-1">
+                            <label for="volunteering" class="form-label">Volunteering:</label>
+                            <input type="text" id="volunteering" name="volunteering" class="form-control" required>
+                        </div>
+                        <div class="mb-1">
+                            <label for="clubs" class="form-label">Clubs:</label>
+                            <input type="text" id="clubs" name="clubs" class="form-control" required>
+                        </div>
                     </div>
-                    <div class="col-md-6 mb-1">
-                        <label for="clubs" class="form-label">Clubs:</label>
-                        <input type="text" id="clubs" name="clubs" class="form-control" required>
+                    <div class="col-md-6">
+                        <div class="mb-1">
+                            <label for="awards" class="form-label">Awards:</label>
+                            <input type="text" id="awards" name="awards" class="form-control" required>
+                        </div>
+                        <div class="mb-1">
+                            <label for="sport" class="form-label">Sport:</label>
+                            <input type="text" id="sport" name="sport" class="form-control" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="createdBy" class="form-label">Created By:</label>
+                            <input type="text" class="form-control" id="createdBy" name="createdBy" required>
+                        </div>
                     </div>
-                    <!-- Sport field modified to be inline with clubs -->
-                    <div class="col-md-6 mb-1">
-                        <label for="sport" class="form-label">Sport:</label>
-                        <input type="text" id="sport" name="sport" class="form-control" required>
-                    </div>
-                </div>
-                
-                <div class="mb-3">
-                    <label for="createdBy" class="form-label tight-label">Created By:</label>
-                    <input type="text" class="form-control" id="createdBy" name="createdBy" required>
-                </div>
+                </div>                
                 <div class="text-center">
                     <button type="submit" class="btn btn-primary mb-5" style="background-color:#468669;font-size: larger;">Add School</button>
                 </div>
