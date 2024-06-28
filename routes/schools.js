@@ -11,9 +11,7 @@ const {
     getEditSchool,
     updateSchools,
     deleteSchools,
-    //getSchoolList,
-    //handleSchoolPost,
-    displayStudentSchools            
+    //addSchoolForm          
 } = require("../controllers/schoolController");
 
 router.route("/new")
@@ -34,5 +32,7 @@ router.route("/update/:id")
 router.route("/delete/:id")
     .post(auth, csrfProtection, validateId, deleteSchools);
 
-  
+// router.route("/addSchool")
+//     .get(auth, csrfProtection, addSchoolForm);
+
 module.exports = router;

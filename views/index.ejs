@@ -56,16 +56,26 @@
           <div class="overlay">Under Construction</div>
         </div>         
       </div>
-    <% } else { %>
+    <% } else { %> 
+      <div class="container mt-3">
+        <div class="row">
+          <div class="col-12"  style="width: 90%; margin: auto;" >
+            <div class="alert alert-success text-center" role="alert">
+              <h2 class="alert-heading">Welcome to GradQuest!</h2>
+              <p style ="font-size: larger">Empowering students and parents to craft the perfect college list together. Start your journey to higher education by exploring, organizing, and applying to the colleges that best fit your dreams and aspirations. Let's make college planning a collaborative and exciting experience!</p>
+            </div>
+          </div>
       <!-- Login and Register Links for Users Not Logged In -->
       <div class="col-md-6 text-center mb-3">
         <a href="/sessions/logon" class="btn btn-success mt-3 w-75" 
-                                  style="background-color: #d1e7dd; color: #0c4128;">
+                                  style="background-color: #d1e7dd; color: #0c4128; font-size: larger">
                                     Click this link to login.
         </a> 
       </div>
       <div class="col-md-6 text-center mb-3">
-        <a href="/sessions/register" class="btn btn-secondary mt-3 w-75">Click this link to register.</a>
+        <a href="/sessions/register" class="btn btn-secondary mt-3 w-75" style ="font-size: larger">
+          Click this link to register.
+        </a>
       </div>
     <% } %>
   </div>

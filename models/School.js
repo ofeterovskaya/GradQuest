@@ -9,13 +9,13 @@ const SchoolSchema = new mongoose.Schema({
     testScores: {
         SAT: {
             type: Number,
-            min: 400, 
+            min: 0, 
             max: 1600,
             required: function() { return !this.testScores.ACT; } // Required if ACT is not provided
         },
         ACT: {
             type: Number,
-            min: 1, // Assuming ACT scores range from 1 to 36
+            min: 0, 
             max: 36,
             required: function() { return !this.testScores.SAT; } // Required if SAT is not provided
         }
@@ -54,8 +54,11 @@ const SchoolSchema = new mongoose.Schema({
         type: mongoose.Types.ObjectId, // CreatedBy should be a MongoDB ObjectId
         ref: 'User', // The ObjectId refers to a User document
         required: [true, 'Please provide a user']
-    }
+    },    
+    schoolCreationDate: {
+        type: Date,
+        default: Date.now // Automatically sets to the current date/time when a new document is created
+    },
 }, { timestamps: true }); // Enable timestamps
-
 // Create a model from the schema and export it
 module.exports = mongoose.model('School', SchoolSchema);

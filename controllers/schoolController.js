@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 const School = require('../models/School');
 const handleErrors = require("../utils/parseValidationErrs");
-const User = require('../models/User');
+//const User = require('../models/User');
 
 // GET a form for adding a new school
 const getNewSchool = (req, res) => {    
@@ -51,8 +51,7 @@ const getSchools = async (req, res) => {
     }
 };
 // POST a new school
-const addSchools = async (req, res, next) => {
-    console.log(req.body); // Log the request body to ensure it's as expected
+const addSchools = async (req, res, next) => {    
     const { schoolName, gpaScore, actScore, satActScore, scoreType,volunteering, awards, clubs, sport, createdBy } = req.body;
 
     // Validate GPA
@@ -75,6 +74,13 @@ const addSchools = async (req, res, next) => {
         return res.status(400).send("Score type must be either SAT or ACT.");
     }
     try {
+        //check if the user is a parent or a student       
+        //check if parent has childID if childId exicts
+        if(req.user.role ==='parent' && !req.user.childId ){
+            throw new Error('Parent does not have a childId');
+        }
+        //throw error if childId does not exist
+       
         const schoolData = {
             schoolName,
             gpa: gpaScore,
@@ -84,8 +90,8 @@ const addSchools = async (req, res, next) => {
             awards,
             clubs,
             sport,
-            createdBy: req.user._id
-        };
+            createdBy:  req.user.childId || req.user._id};
+
         await School.create(schoolData);
         console.log("School successfully added");
         res.redirect('/schools');
@@ -114,7 +120,11 @@ const getEditSchool = async (req, res) => {
     try {
         const school = await School.findById(req.params.id);
         if (school) {
-            res.render('editForm', { school: school, csrfToken: req.csrfToken() });
+            // Directly pass the school object as it includes testScores and gpa
+            res.render('editForm', { 
+                school: school, // This includes testScores (SAT, ACT) and gpa
+                csrfToken: req.csrfToken() 
+            });
         } else {
             throw new Error('School not found');
         }
@@ -158,6 +168,15 @@ const deleteSchools = async (req, res, next) => {
         handleErrors(error, req, res, '/schools');
     }
 };
+// Show add new school form for parent
+const addSchoolForm = (req, res) => {
+    if (req.user.role === 'parent') {       
+        res.render('addSchool', { school: null, csrfToken: req.csrfToken() });
+    } else {
+        res.redirect('/schools');
+    }
+};
+
 module.exports = {
   getNewSchool,  
   getSchools,  
@@ -165,5 +184,6 @@ module.exports = {
   editSchools,
   getEditSchool,
   updateSchools,
-  deleteSchools,    
+  deleteSchools,  
+  addSchoolForm,  
 };
