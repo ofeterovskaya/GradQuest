@@ -86,15 +86,26 @@
             </div>
             <!-- Second Box: Action Buttons -->
             <div class="card-footer" style="text-align: center;">
-              <a href="/schools/edit/<%= school.id %>"
-                 class="btn btn-success" 
-                 style="margin-right: 20%; background-color: #d1e7dd; color: #0c4128;">
-                 Edit
-              </a>
+              <% if (user.role !== 'parent') { %>
+                <a href="/schools/edit/<%= school.id %>"
+                   class="btn btn-success" 
+                   style="margin-right: 20%; background-color: #d1e7dd; color: #0c4128;">
+                   Edit
+                </a>
+              <% } else { %>
+                <button disabled class="btn btn-success" 
+                        style="margin-right: 20%; background-color: #d1e7dd; color: #0c4128;">
+                  Edit
+                </button>
+              <% } %>
               <form action="/schools/delete/<%= school.id %>" method="POST" style="display: inline;">
                 <input type="hidden" name="_method" value="DELETE">
                 <input type="hidden" name="_csrf" value="<%= csrfToken %>">
-                <button type="submit" class="btn btn-danger">Delete</button>
+                <% if (user.role !== 'parent') { %>
+                  <button type="submit" class="btn btn-danger">Delete</button>
+                <% } else { %>
+                  <button type="submit" class="btn btn-danger" disabled>Delete</button>
+                <% } %>
               </form>
             </div>
           </div>
