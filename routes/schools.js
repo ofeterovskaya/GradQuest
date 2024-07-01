@@ -37,7 +37,4 @@ router
   .route('/delete/:id')
   .post(auth, csrfProtection, validateId, deleteSchools);
 
-// router.route("/addSchool")
-//     .get(auth, csrfProtection, addSchoolForm);
-
 module.exports = router;

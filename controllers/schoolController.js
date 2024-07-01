@@ -183,15 +183,6 @@ const deleteSchools = async (req, res, next) => {
     handleErrors(error, req, res, '/schools');
   }
 };
-// Show add new school form for parent
-const addSchoolForm = (req, res) => {
-  if (req.user.role === 'parent') {
-    res.render('addSchool', { school: null, csrfToken: req.csrfToken() });
-  } else {
-    res.redirect('/schools');
-  }
-};
-
 module.exports = {
   getNewSchool,
   getSchools,
@@ -199,6 +190,5 @@ module.exports = {
   editSchools,
   getEditSchool,
   updateSchools,
-  deleteSchools,
-  addSchoolForm
+  deleteSchools,  
 };

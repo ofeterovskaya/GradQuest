@@ -10,28 +10,53 @@ const registerDo = async (req, res) => {
     if (req.body.password !== req.body.password1) {
       throw new Error('The passwords do not match.'); // throwing password error here gets caught below
     }
-    await User.create(req.body);
-    if (req.body.userType === 'student') {
-      await StudentProfile.create({
-        userId: user._id,
-        ...req.body.studentDetails
-      }); // Create a student profile linked to the user
-    }
-    res.redirect('/');
+    //if a parent is registering, they must provide a student's email
+    //if a parent provide student's email it should be exist in DB
+    //throw error if student's email is not found
+
+
+
+    // in Register template if user select role parent he should got additional field to enter student email
+    //in index template if user role is student show student's view,else show parent's view
+
+
+    await User.create(req.body);   
+    res.redirect("/");
   } catch (e) {
-    if (e.constructor.name === 'ValidationError') {
+    if (e.constructor.name === "ValidationError") {
       parseVErr(e, req);
-    } else if (e.name === 'MongoServerError' && e.code === 11000) {
-      req.flash('error', 'That email address is already registered.');
+    } else if (e.name === "MongoServerError" && e.code === 11000) {
+      req.flash("error", "That email address is already registered.");
     } else {
-      req.flash('error', e.message);
+      req.flash("error", e.message);
     }
-    res.render('register', {
-      errors: req.flash('error'),
-      csrfToken: req.csrfToken()
-    });
+    res.render("register", { errors: req.flash("error"), csrfToken: req.csrfToken() });
   }
 };
+
+    // if user role is parent, check if student email is provided
+//     await User.create(req.body);
+//     if (req.body.userType === 'student') {
+//       await StudentProfile.create({
+//         userId: user._id,
+//         ...req.body.studentDetails
+//       }); // Create a student profile linked to the user
+//     }
+//     res.redirect('/');
+//   } catch (e) {
+//     if (e.constructor.name === 'ValidationError') {
+//       parseVErr(e, req);
+//     } else if (e.name === 'MongoServerError' && e.code === 11000) {
+//       req.flash('error', 'That email address is already registered.');
+//     } else {
+//       req.flash('error', e.message);
+//     }
+//     res.render('register', {
+//       errors: req.flash('error'),
+//       csrfToken: req.csrfToken()
+//     });
+//   }
+// };
 
 const logoff = (req, res) => {
   req.session.destroy(function (err) {
